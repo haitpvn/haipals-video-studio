@@ -239,11 +239,12 @@ function renderList() {
 }
 
 function renderMissing() {
-  const missing = project.clips.filter((c) => !files.has(c.id));
+  const missing = project.clips.filter((c) => !files.has(c.id)).map((c) => c.name);
+  if (project.settings.music && !musicFile) missing.push(`${project.settings.music.name} (nhạc nền)`);
   $('missingBanner').hidden = !missing.length;
   if (missing.length) {
     $('missingText').textContent =
-      `Dự án cần ${missing.length} file gốc: ${missing.map((c) => c.name).join(', ')}. ` +
+      `Dự án cần ${missing.length} file gốc: ${missing.join(', ')}. ` +
       'Bấm "Chọn lại file" hoặc kéo thả các file đó vào.';
   }
 }
@@ -703,6 +704,7 @@ function setMusic(f) {
     toast(`Đã chọn nhạc nền: ${f.name}`, 'ok');
   } else project.settings.music = null;
   settingsUI?.refresh();
+  renderMissing();
 }
 
 // ---------------------------------------------------------------------------
