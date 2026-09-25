@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Haipals Video Studio — dựng video dọc 9:16 ngay trên trình duyệt. File không bao giờ rời khỏi máy của bạn." />
+    <title>Haipals Video Studio</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23163052'/%3E%3Cpath d='M24 18l24 14-24 14z' fill='%23E2483A'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">▶</span>
+        <div>
+          <h1>Haipals Video Studio</h1>
+          <p class="brand-sub">Video dọc 9:16 · File không rời khỏi máy bạn</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn" id="btnOpen" type="button" title="Mở file dự án .json đã lưu">📂 Mở dự án</button>
+        <button class="btn" id="btnSave" type="button" title="Lưu dự án để làm tiếp sau">💾 Lưu dự án</button>
+        <button class="btn btn-primary" id="btnExport" type="button">⬇ Xuất video</button>
+      </div>
+    </header>
+
+    <div id="missingBanner" class="banner" hidden>
+      <span id="missingText"></span>
+      <button class="btn btn-small" id="btnRelink" type="button">Chọn lại file</button>
+    </div>
+
+    <main class="layout">
+      <!-- 1. Timeline -->
+      <section class="panel timeline" aria-labelledby="h-clips">
+        <h2 id="h-clips"><span class="step">1</span> Clip của bạn</h2>
+        <label class="dropzone" id="dropzone">
+          <input type="file" id="fileInput" multiple accept="video/mp4,video/quicktime,video/*,.mov,.mp4,image/*" hidden />
+          <span class="dz-icon" aria-hidden="true">＋</span>
+          <strong>Kéo thả video / ảnh vào đây</strong>
+          <span>hoặc bấm để chọn file (MP4, MOV, JPG, PNG)</span>
+        </label>
+        <ol id="clipList" class="clip-list"></ol>
+        <p class="total" id="totalTime">Chưa có clip nào</p>
+      </section>
+
+      <!-- Preview -->
+      <section class="stage" aria-label="Xem trước">
+        <div class="phone">
+          <canvas id="preview" width="540" height="960"></canvas>
+          <div class="preview-empty" id="previewEmpty">Thêm clip để xem trước</div>
+        </div>
+        <div class="player" id="player">
+          <button class="btn btn-round" id="btnPlay" type="button" title="Phát / dừng">▶</button>
+          <input type="range" id="scrub" min="0" max="1" step="0.01" value="0" aria-label="Vị trí xem trước" />
+          <span class="time" id="timeLabel">0:00.0</span>
+        </div>
+        <label class="check small"><input type="checkbox" id="chkSafe" /> Hiện vùng an toàn (TikTok / Instagram)</label>
+      </section>
+
+      <!-- 2. Inspector -->
+      <section class="panel inspector" aria-labelledby="h-edit">
+        <h2 id="h-edit"><span class="step">2</span> Chỉnh clip</h2>
+        <p class="hint" id="inspectorEmpty">Chọn một clip bên trái để chỉnh.</p>
+        <div id="inspector" hidden>
+          <p class="clip-title" id="insName"></p>
+
+          <fieldset id="trimBox">
+            <legend>✂️ Cắt clip</legend>
+            <div class="row">
+              <label>Bắt đầu (giây)<input type="number" id="trimStart" min="0" step="0.1" /></label>
+              <label>Kết thúc (giây)<input type="number" id="trimEnd" min="0" step="0.1" /></label>
+            </div>
+            <div class="row">
+              <button class="btn btn-small" id="btnSetStart" type="button">⟦ Đặt đầu tại đây</button>
+              <button class="btn btn-small" id="btnSetEnd" type="button">Đặt cuối tại đây ⟧</button>
+            </div>
+            <p class="hint" id="trimInfo"></p>
+          </fieldset>
+
+          <fieldset id="imageBox">
+            <legend>🖼️ Ảnh</legend>
+            <label>Hiển thị trong (giây)<input type="number" id="imageDuration" min="0.5" max="30" step="0.5" /></label>
+          </fieldset>
+
+          <fieldset>
+            <legend>🔤 Chữ trên video</legend>
+            <label>Tiêu đề (chữ to)<textarea id="headline" rows="2" placeholder="VD: Visa Schengen 2026"></textarea></label>
+            <label>Dòng phụ<textarea id="subtitle" rows="2" placeholder="VD: Hồ sơ gọn – hẹn nhanh – hỗ trợ tận tình"></textarea></label>
+            <label>Nút màu cam (tuỳ chọn)<input type="text" id="pill" placeholder="VD: Nhắn Haipals ngay" /></label>
+            <div class="seg" role="radiogroup" aria-label="Vị trí chữ">
+              <span>Vị trí chữ:</span>
+              <label><input type="radio" name="textPos" value="top" /> Trên</label>
+              <label><input type="radio" name="textPos" value="middle" /> Giữa</label>
+              <label><input type="radio" name="textPos" value="bottom" /> Dưới</label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>⚙️ Tuỳ chọn</legend>
+            <label class="check"><input type="checkbox" id="disclaimer" /> Hiện câu lưu ý visa ở cuối</label>
+            <label class="check" id="muteRow"><input type="checkbox" id="muted" /> Tắt tiếng clip này</label>
+            <label class="check" id="zoomRow"><input type="checkbox" id="zoom" /> Zoom nhẹ cho ảnh</label>
+            <button class="btn btn-small" id="btnApplyAll" type="button" title="Áp dụng vị trí chữ và câu lưu ý cho mọi clip">Áp dụng tuỳ chọn này cho tất cả clip</button>
+          </fieldset>
+        </div>
+
+        <div id="settingsPanel"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      © Hai &amp; Pals Travel and Visa Ltd · Mọi xử lý diễn ra trên máy của bạn, không tải file lên máy chủ nào.
+    </footer>
+
+    <dialog id="exportDialog">
+      <h2>Xuất video</h2>
+      <div id="exportRunning">
+        <p id="exportLabel">Đang chuẩn bị…</p>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="progress-fill" id="progressFill"></div></div>
+        <p class="progress-pct" id="progressPct">0%</p>
+        <p class="hint">Vui lòng giữ nguyên tab này mở. Video dài có thể mất vài phút.</p>
+        <button class="btn" id="btnCancel" type="button">Huỷ</button>
+      </div>
+      <div id="exportDone" hidden>
+        <video id="resultVideo" controls playsinline></video>
+        <p class="hint" id="resultInfo"></p>
+        <div class="row">
+          <a class="btn btn-primary" id="btnDownload" download>⬇ Tải video về máy</a>
+          <button class="btn" id="btnCloseExport" type="button">Đóng</button>
+        </div>
+      </div>
+      <div id="exportError" hidden>
+        <p class="error">Rất tiếc, có lỗi khi xuất video.</p>
+        <details><summary>Chi tiết kỹ thuật</summary><pre id="errorText"></pre></details>
+        <button class="btn" id="btnCloseError" type="button">Đóng</button>
+      </div>
+    </dialog>
+
+    <input type="file" id="projectInput" accept=".json,application/json" hidden />
+    <input type="file" id="relinkInput" multiple hidden />
+    <div id="toasts" class="toasts" aria-live="polite"></div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
