@@ -1,0 +1,4 @@
+node_modules/
+dist/
+public/ffmpeg/
+.DS_Store
