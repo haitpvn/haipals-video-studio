@@ -1,7 +1,7 @@
 """Synthesise the music bed and extra SFX for the share-code TikTok.
 
 Everything is generated in code (no samples, no licences):
-  public/audio/music.wav      ~39s upbeat/dramatic bed, 128 BPM, A minor
+  public/audio/music.wav      ~41.6s upbeat/dramatic bed, 128 BPM, A minor
   public/sfx/whoosh.wav       filtered noise sweep for scene cuts
   public/sfx/buzz.wav         two-tone error buzzer
   public/sfx/kaching.wav      cash-register bell + coins
@@ -85,7 +85,7 @@ def saw(freq, sec, detune=0.0):
     return out / 3
 
 
-def music(total=39.0, bpm=128):
+def music(total=41.6, bpm=128):
     beat = 60 / bpm
     n = int(total * SR)
     mix = np.zeros(n)
