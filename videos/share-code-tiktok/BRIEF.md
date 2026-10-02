@@ -33,5 +33,6 @@ Topic: "3 lỗi share code khiến bạn mất tiền oan cho Visa Châu Âu" + 
 
 - Simplified mock screens only — no real GOV.UK, TLS or VFS logos.
 - Keep text in TikTok safe zone (x 60–940, y 170–1420 on 1080×1920).
+- Hậu quả: £15 is the visa centre's "Get It Right" service (print extra documents / minor updates to the application file), not a printing fee.
 - Footer small print: "Quy định có thể thay đổi - luôn kiểm tra trên gov.uk".
 - Show storyboard/stills before rendering.
