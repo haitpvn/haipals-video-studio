@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="public/vendor/gsap.min.js"></script>
+    <style>
+      /* Be Vietnam Pro — latin + latin-ext + vietnamese subsets so every diacritic renders */
+      @font-face { font-family: "Be Vietnam Pro"; font-weight: 500; src: url("public/fonts/be-vietnam-pro-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+      @font-face { font-family: "Be Vietnam Pro"; font-weight: 500; src: url("public/fonts/be-vietnam-pro-latin-ext-500-normal.woff2") format("woff2"); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+      @font-face { font-family: "Be Vietnam Pro"; font-weight: 500; src: url("public/fonts/be-vietnam-pro-vietnamese-500-normal.woff2") format("woff2"); unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB; }
+      @font-face { font-family: "Be Vietnam Pro"; font-weight: 700; src: url("public/fonts/be-vietnam-pro-latin-700-normal.woff2") format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+      @font-face { font-family: "Be Vietnam Pro"; font-weight: 700; src: url("public/fonts/be-vietnam-pro-latin-ext-700-normal.woff2") format("woff2"); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+      @font-face { font-family: "Be Vietnam Pro"; font-weight: 700; src: url("public/fonts/be-vietnam-pro-vietnamese-700-normal.woff2") format("woff2"); unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB; }
+      @font-face { font-family: "Be Vietnam Pro"; font-weight: 800; src: url("public/fonts/be-vietnam-pro-latin-800-normal.woff2") format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+      @font-face { font-family: "Be Vietnam Pro"; font-weight: 800; src: url("public/fonts/be-vietnam-pro-latin-ext-800-normal.woff2") format("woff2"); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+      @font-face { font-family: "Be Vietnam Pro"; font-weight: 800; src: url("public/fonts/be-vietnam-pro-vietnamese-800-normal.woff2") format("woff2"); unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB; }
+      @font-face { font-family: "Be Vietnam Pro"; font-weight: 900; src: url("public/fonts/be-vietnam-pro-latin-900-normal.woff2") format("woff2"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+      @font-face { font-family: "Be Vietnam Pro"; font-weight: 900; src: url("public/fonts/be-vietnam-pro-latin-ext-900-normal.woff2") format("woff2"); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+      @font-face { font-family: "Be Vietnam Pro"; font-weight: 900; src: url("public/fonts/be-vietnam-pro-vietnamese-900-normal.woff2") format("woff2"); unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB; }
+
+      :root {
+        --navy: #14213d;
+        --red: #ff3b5c;
+        --red-dark: #c8102e;
+        --yellow: #ffd23f;
+        --cream: #fff7e6;
+        --green: #1fb15a;
+        --green-dark: #0f7a3a;
+        --ink: #111827;
+        --muted: #5b6475;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--navy); }
+      #root {
+        position: relative; width: 1080px; height: 1920px; overflow: hidden;
+        font-family: "Be Vietnam Pro", sans-serif; color: var(--ink);
+        background: var(--navy);
+      }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .abs { position: absolute; }
+      .rays {
+        position: absolute; left: -540px; top: -240px; width: 2160px; height: 2160px;
+        background: repeating-conic-gradient(from 0deg, rgba(255,255,255,0.13) 0deg 9deg, rgba(255,255,255,0) 9deg 18deg);
+        border-radius: 50%;
+      }
+      .chip {
+        position: absolute; left: 60px; top: 190px;
+        padding: 12px 28px; border-radius: 999px;
+        font-size: 40px; font-weight: 900; letter-spacing: 0.04em; color: #fff;
+        border: 5px solid var(--ink); box-shadow: 6px 6px 0 var(--ink);
+      }
+      .headline {
+        position: absolute; left: 60px; width: 880px;
+        font-weight: 900; text-transform: uppercase; line-height: 1.06; letter-spacing: -0.01em;
+      }
+      .mascot { position: absolute; transform-origin: 50% 100%; }
+      .card {
+        position: absolute; background: #fff; border-radius: 28px;
+        border: 5px solid var(--ink); box-shadow: 10px 10px 0 var(--ink);
+      }
+      .caption {
+        position: absolute; padding: 18px 26px; border-radius: 22px;
+        background: var(--ink); color: #fff; font-weight: 800; font-size: 44px; line-height: 1.2;
+      }
+      .caption b { color: var(--yellow); font-weight: 900; }
+      .flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+
+      /* mock form rows */
+      .row { display: flex; align-items: center; gap: 22px; padding: 20px 26px; border-radius: 18px; position: relative; }
+      .radio { width: 50px; height: 50px; flex: none; border-radius: 50%; border: 5px solid var(--ink); position: relative; background: #fff; }
+      .radio-dot { position: absolute; inset: 7px; border-radius: 50%; }
+      .row-text { font-size: 38px; font-weight: 700; line-height: 1.15; }
+      .row-sub { font-size: 28px; font-weight: 500; color: var(--muted); margin-top: 4px; }
+      .stamp { position: absolute; right: 22px; top: 50%; margin-top: -32px; width: 64px; height: 64px; }
+
+      /* footer small print */
+      #footer {
+        position: absolute; left: 60px; top: 1404px; width: 880px;
+        padding: 8px 18px; border-radius: 12px; background: rgba(17, 24, 39, 0.72);
+        color: #fff; font-size: 24px; font-weight: 500; text-align: center;
+      }
+      #cursor { position: absolute; width: 72px; height: 88px; left: 0; top: 0; opacity: 0; z-index: 30; }
+      .ring { position: absolute; width: 120px; height: 120px; border-radius: 50%; border: 8px solid var(--ink); opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="38" data-width="1080" data-height="1920">
+
+      <!-- ═════════ SCENE 1 · HOOK (0 – 3) ═════════ -->
+      <div id="s1" class="scene clip" data-start="0" data-duration="3" data-track-index="0" style="background: var(--red)">
+        <div class="rays" id="s1-rays" data-layout-allow-overflow></div>
+        <div class="chip" id="s1-chip" style="background: var(--navy)">3 LỖI SHARE CODE · VISA CHÂU ÂU</div>
+        <svg id="s1-x" class="abs" style="left: 440px; top: 300px; width: 200px; height: 200px" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="46" fill="#fff" stroke="#111827" stroke-width="5" />
+          <path d="M33 33 L67 67 M67 33 L33 67" stroke="#c8102e" stroke-width="11" stroke-linecap="round" />
+        </svg>
+        <div id="s1-big" class="headline" style="top: 540px; text-align: center; font-size: 180px; white-space: nowrap; color: #fff; -webkit-text-stroke: 8px #111827; paint-order: stroke fill; text-shadow: 10px 10px 0 #111827">MẤT £15</div>
+        <div id="s1-sub" class="headline" style="top: 770px; text-align: center; font-size: 96px; color: var(--yellow); -webkit-text-stroke: 6px #111827; paint-order: stroke fill">VÌ 1 CÚ CLICK SAI</div>
+        <img id="s1-cat" class="mascot" src="public/mascot/mascot_shock.png" alt="" style="left: 330px; top: 900px; height: 500px" />
+      </div>
+
+      <!-- ═════════ SCENE 2 · LỖI 1 (3 – 9) ═════════ -->
+      <div id="s2" class="scene clip" data-start="3" data-duration="6" data-track-index="0" style="background: var(--cream)">
+        <div id="s2-cam" class="abs" style="inset: 0; transform-origin: 50% 40%">
+          <div class="chip" id="s2-chip" style="background: var(--red)">LỖI 1</div>
+          <div id="s2-h1" class="headline" style="top: 285px; font-size: 92px; color: var(--navy)">CHỌN SAI LÝ DO</div>
+          <div id="s2-h2" class="headline" style="top: 285px; font-size: 64px; color: var(--navy); opacity: 0">VISA SCHENGEN → CHỌN<br /><span style="font-size: 96px; color: var(--green-dark)">ANYTHING ELSE</span></div>
+          <div class="card" id="s2-card" style="left: 60px; top: 500px; width: 880px; padding: 34px 26px 30px">
+            <div style="font-size: 44px; font-weight: 800; padding: 0 26px 14px">Why do you need a share code?</div>
+            <div class="row" id="s2-r1"><div class="radio"><div class="radio-dot" id="s2-d1" style="background: var(--red-dark)"></div></div><div><div class="row-text">Right to work</div></div>
+              <svg class="stamp" id="s2-x1" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#c8102e" /><path d="M32 32 L68 68 M68 32 L32 68" stroke="#fff" stroke-width="12" stroke-linecap="round" /></svg></div>
+            <div class="row" id="s2-r2"><div class="radio"></div><div><div class="row-text">Right to rent</div></div>
+              <svg class="stamp" id="s2-x2" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#c8102e" /><path d="M32 32 L68 68 M68 32 L32 68" stroke="#fff" stroke-width="12" stroke-linecap="round" /></svg></div>
+            <div class="row" id="s2-r3"><div class="radio"><div class="radio-dot" id="s2-d3" style="background: var(--green)"></div></div><div><div class="row-text">Anything else</div><div class="row-sub">du lịch, học tập, ngân hàng…</div></div>
+              <svg class="stamp" id="s2-v3" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#1fb15a" /><path d="M28 52 L44 68 L73 36" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+          </div>
+          <div class="caption" id="s2-cap1" style="left: 380px; top: 1130px; width: 560px; background: var(--red-dark)">Work / Rent <b style="color:#fff">✗</b> KHÔNG dùng cho visa du lịch</div>
+          <div class="caption" id="s2-cap2" style="left: 380px; top: 1130px; width: 560px; background: var(--green-dark); opacity: 0">Visa Schengen → <b>OTHER / ANYTHING ELSE</b></div>
+          <img id="s2-cat-a" class="mascot" src="public/mascot/mascot_shock.png" alt="" style="left: 40px; top: 1010px; height: 380px" />
+          <img id="s2-cat-b" class="mascot" src="public/mascot/mascot_point.png" alt="" style="left: 20px; top: 1030px; height: 360px; opacity: 0" />
+        </div>
+        <div class="flash" id="s2-flash"></div>
+      </div>
+
+      <!-- ═════════ SCENE 3 · LỖI 2 (9 – 14) ═════════ -->
+      <div id="s3" class="scene clip" data-start="9" data-duration="5" data-track-index="0" style="background: var(--yellow)">
+        <div id="s3-cam" class="abs" style="inset: 0; transform-origin: 50% 45%">
+          <div class="chip" id="s3-chip" style="background: var(--red)">LỖI 2</div>
+          <div id="s3-h" class="headline" style="top: 285px; font-size: 100px; color: var(--navy)">LẤY CODE<br />QUÁ SỚM</div>
+          <div class="card" style="left: 60px; top: 560px; width: 880px; height: 400px" id="s3-card">
+            <div class="abs" style="left: 70px; top: 190px; width: 740px; height: 14px; border-radius: 7px; background: #e5e7eb"></div>
+            <div class="abs" id="s3-valid" style="left: 70px; top: 190px; width: 380px; height: 14px; border-radius: 7px; background: var(--green); transform-origin: left center"></div>
+            <div class="abs" id="s3-gap" style="left: 450px; top: 176px; width: 360px; height: 42px; border-radius: 8px; background: repeating-linear-gradient(135deg, rgba(200,16,46,0.85) 0 14px, rgba(200,16,46,0.35) 14px 28px)"></div>
+            <!-- markers -->
+            <div class="abs" id="s3-m1" style="left: 40px; top: 70px; width: 160px; text-align: center">
+              <div style="font-size: 30px; font-weight: 800">Lấy code</div><div style="font-size: 26px; color: var(--muted); font-weight: 700">01/03</div>
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--navy); margin: 22px auto 0"></div>
+            </div>
+            <div class="abs" id="s3-m2" style="left: 370px; top: 70px; width: 160px; text-align: center">
+              <div style="font-size: 30px; font-weight: 800; color: var(--red-dark)">Hết hạn</div><div style="font-size: 26px; color: var(--muted); font-weight: 700">30/03</div>
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--red-dark); margin: 22px auto 0"></div>
+            </div>
+            <div class="abs" id="s3-m3" style="left: 690px; top: 6px; width: 170px; text-align: center">
+              <svg viewBox="0 0 100 100" style="width: 76px; height: 76px"><rect x="10" y="18" width="80" height="72" rx="10" fill="#fff" stroke="#111827" stroke-width="6"/><rect x="10" y="18" width="80" height="22" rx="8" fill="#ff3b5c" stroke="#111827" stroke-width="6"/><path d="M30 10 V26 M70 10 V26" stroke="#111827" stroke-width="7" stroke-linecap="round"/><text x="50" y="76" font-size="30" font-weight="900" text-anchor="middle" fill="#111827" font-family="Be Vietnam Pro">15</text></svg>
+              <div style="font-size: 30px; font-weight: 800; line-height: 1.1">Ngày hẹn</div><div style="font-size: 26px; color: var(--muted); font-weight: 700; line-height: 1.1">15/04</div>
+            </div>
+            <div class="abs" id="s3-warn" style="left: 70px; top: 270px; width: 740px; text-align: center; font-size: 46px; font-weight: 900; color: var(--red-dark)">HẾT HẠN TRƯỚC NGÀY HẸN!</div>
+          </div>
+          <div class="caption" id="s3-cap" style="left: 60px; top: 1020px; width: 580px">✓ Lấy code <b>gần ngày hẹn</b> &amp; kiểm tra ngày hết hạn</div>
+          <img id="s3-cat" class="mascot" src="public/mascot/mascot_confused.png" alt="" style="left: 640px; top: 1000px; height: 390px" />
+        </div>
+        <div class="flash" id="s3-flash"></div>
+      </div>
+
+      <!-- ═════════ SCENE 4 · LỖI 3 (14 – 19) ═════════ -->
+      <div id="s4" class="scene clip" data-start="14" data-duration="5" data-track-index="0" style="background: var(--cream)">
+        <div id="s4-cam" class="abs" style="inset: 0; transform-origin: 50% 45%">
+          <div class="chip" id="s4-chip" style="background: var(--red)">LỖI 3</div>
+          <div id="s4-h" class="headline" style="top: 285px; font-size: 84px; color: var(--navy)">eVISA VẪN GẮN<br />HỘ CHIẾU CŨ</div>
+          <!-- eVisa card -->
+          <div class="card" id="s4-evisa" style="left: 60px; top: 560px; width: 380px; height: 250px; background: #6d4bd6; padding: 26px; color: #fff">
+            <div style="font-size: 30px; font-weight: 900; letter-spacing: 0.06em">eVISA</div>
+            <div style="display: flex; gap: 18px; margin-top: 22px; align-items: center">
+              <div style="width: 84px; height: 100px; border-radius: 12px; background: rgba(255,255,255,0.85)"></div>
+              <div style="flex: 1"><div style="height: 14px; border-radius: 7px; background: rgba(255,255,255,0.8); width: 90%"></div><div style="height: 14px; border-radius: 7px; background: rgba(255,255,255,0.5); width: 70%; margin-top: 14px"></div><div style="height: 14px; border-radius: 7px; background: rgba(255,255,255,0.5); width: 80%; margin-top: 14px"></div></div>
+            </div>
+          </div>
+          <!-- link lines -->
+          <svg class="abs" style="left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible" viewBox="0 0 1080 1920">
+            <path id="s4-link-old" d="M440 660 C 520 660, 540 640, 620 640" stroke="#c8102e" stroke-width="10" stroke-dasharray="20 14" fill="none" />
+            <path id="s4-link-new" d="M440 720 C 530 740, 520 930, 620 930" stroke="#1fb15a" stroke-width="12" fill="none" stroke-linecap="round" />
+          </svg>
+          <!-- old passport -->
+          <div class="card" id="s4-old" style="left: 620px; top: 545px; width: 300px; height: 190px; background: #8a1c2b; color: #f5d27a; padding: 22px">
+            <div style="font-size: 26px; font-weight: 800">HỘ CHIẾU</div>
+            <div style="font-size: 52px; font-weight: 900; margin-top: 18px; color: #fff">CŨ</div>
+            <svg class="abs" id="s4-oldx" style="right: -26px; top: -30px; width: 96px; height: 96px" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#c8102e" stroke="#111827" stroke-width="5"/><path d="M32 32 L68 68 M68 32 L32 68" stroke="#fff" stroke-width="12" stroke-linecap="round"/></svg>
+          </div>
+          <!-- new passport -->
+          <div class="card" id="s4-new" style="left: 620px; top: 840px; width: 300px; height: 190px; background: #8a1c2b; color: #f5d27a; padding: 22px">
+            <div style="font-size: 26px; font-weight: 800">HỘ CHIẾU</div>
+            <div style="font-size: 52px; font-weight: 900; margin-top: 18px; color: #fff">MỚI</div>
+            <svg class="abs" id="s4-newv" style="right: -26px; top: -30px; width: 96px; height: 96px" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#1fb15a" stroke="#111827" stroke-width="5"/><path d="M28 52 L44 68 L73 36" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="caption" id="s4-cap" style="left: 380px; top: 1110px; width: 560px; background: var(--green-dark)">Cập nhật <b>hộ chiếu mới</b> trên UKVI TRƯỚC khi lấy code</div>
+          <img id="s4-cat" class="mascot" src="public/mascot/mascot_shock.png" alt="" style="left: 40px; top: 1010px; height: 380px" />
+        </div>
+        <div class="flash" id="s4-flash"></div>
+      </div>
+
+      <!-- ═════════ SCENE 5 · HẬU QUẢ (19 – 24) ═════════ -->
+      <div id="s5" class="scene clip" data-start="19" data-duration="5" data-track-index="0" style="background: var(--navy)">
+        <div id="s5-cam" data-layout-allow-overflow class="abs" style="inset: 0; transform-origin: 50% 45%">
+          <div class="chip" id="s5-chip" style="background: var(--red)">HẬU QUẢ</div>
+          <div id="s5-h" class="headline" style="top: 285px; font-size: 78px; color: #fff">CÓ THỂ BỊ BẮT<br /><span style="color: var(--yellow)">LÀM LẠI</span> TẠI<br />TRUNG TÂM</div>
+          <div class="card" id="s5-warn" style="left: 60px; top: 620px; width: 520px; padding: 26px 30px; display: flex; gap: 22px; align-items: center">
+            <svg viewBox="0 0 100 100" style="width: 90px; height: 90px; flex: none"><path d="M50 8 L94 88 H6 Z" fill="#ffd23f" stroke="#111827" stroke-width="6" stroke-linejoin="round"/><path d="M50 36 V60" stroke="#111827" stroke-width="9" stroke-linecap="round"/><circle cx="50" cy="74" r="5.5" fill="#111827"/></svg>
+            <div style="font-size: 36px; font-weight: 800; line-height: 1.2">Share code<br />không hợp lệ</div>
+          </div>
+          <!-- receipt -->
+          <div class="card" id="s5-receipt" data-layout-allow-overlap style="left: 540px; top: 780px; width: 400px; padding: 28px 30px 34px; transform: rotate(3deg); border-radius: 18px">
+            <div style="font-size: 26px; font-weight: 800; color: var(--muted); letter-spacing: 0.08em">PHÍ TẠI TRUNG TÂM</div>
+            <div style="border-top: 4px dashed #d1d5db; margin: 16px 0"></div>
+            <div data-layout-allow-overlap style="font-size: 34px; font-weight: 800; line-height: 1.2">Dịch vụ<br />“Get It Right”</div><div data-layout-allow-overlap style="font-size: 24px; font-weight: 500; color: var(--muted); margin-top: 6px">in thêm giấy tờ / sửa hồ sơ</div>
+            <div id="s5-amount" data-layout-allow-overlap style="margin-top: 10px; font-size: 96px; font-weight: 900; color: var(--red-dark); line-height: 1.15; white-space: nowrap">+£15</div>
+          </div>
+          <div class="abs" id="s5-stamp" style="left: 380px; top: 1215px; padding: 8px 22px; border: 7px solid var(--red); border-radius: 16px; color: var(--red); font-size: 54px; white-space: nowrap; font-weight: 900; transform: rotate(-8deg); background: rgba(20,33,61,0.6)">MẤT TIỀN OAN!</div>
+          <img id="s5-cat" class="mascot" src="public/mascot/mascot_confused.png" alt="" style="left: 30px; top: 1010px; height: 380px" />
+        </div>
+        <div class="flash" id="s5-flash"></div>
+      </div>
+
+      <!-- ═════════ SCENE 6 · 4 BƯỚC (24 – 34) ═════════ -->
+      <div id="s6" class="scene clip" data-start="24" data-duration="10" data-track-index="0" style="background: #eafbf0">
+        <div class="chip" id="s6-chip" style="background: var(--green-dark)">LẤY SHARE CODE ĐÚNG · 4 BƯỚC</div>
+        <!-- progress -->
+        <div class="abs" style="left: 60px; top: 300px; width: 880px; display: flex; gap: 16px">
+          <div class="abs" style="left: 0; top: 0; width: 880px; height: 18px; border-radius: 9px; background: #cdeed9"></div>
+          <div class="abs" id="s6-prog" style="left: 0; top: 0; width: 880px; height: 18px; border-radius: 9px; background: var(--green); transform-origin: left center"></div>
+        </div>
+
+        <!-- step 1 -->
+        <div id="st1" class="abs" style="left: 0; top: 0; width: 1080px">
+          <div class="headline" style="top: 360px; font-size: 64px; color: var(--navy); text-transform: none"><span class="stepnum" style="display:inline-block; width: 92px; height: 92px; border-radius: 50%; background: var(--green-dark); color: #fff; text-align: center; line-height: 92px; font-size: 58px; margin-right: 18px; vertical-align: middle">1</span>Google tìm:</div>
+          <div class="card" style="left: 60px; top: 520px; width: 880px; padding: 30px 30px; border-radius: 60px; display: flex; align-items: center; gap: 22px">
+            <svg viewBox="0 0 100 100" style="width: 64px; height: 64px; flex: none"><circle cx="42" cy="42" r="26" fill="none" stroke="#111827" stroke-width="10"/><path d="M62 62 L86 86" stroke="#111827" stroke-width="12" stroke-linecap="round"/></svg>
+            <div id="st1-type" style="font-size: 38px; font-weight: 700; line-height: 1.25; clip-path: inset(0 100% 0 0)">View and prove your immigration status</div>
+          </div>
+          <div class="caption" id="st1-cap" style="left: 60px; top: 700px; width: 880px; background: var(--navy)">Mở trang chính thức trên <b>gov.uk</b></div>
+        </div>
+        <!-- step 2 -->
+        <div id="st2" class="abs" style="left: 0; top: 0; width: 1080px; opacity: 0">
+          <div class="headline" style="top: 360px; font-size: 64px; color: var(--navy); text-transform: none"><span style="display:inline-block; width: 92px; height: 92px; border-radius: 50%; background: var(--green-dark); color: #fff; text-align: center; line-height: 92px; font-size: 58px; margin-right: 18px; vertical-align: middle">2</span>Đăng nhập UKVI</div>
+          <div class="card" style="left: 60px; top: 520px; width: 880px; padding: 34px 40px 40px">
+            <div style="font-size: 30px; font-weight: 800; color: var(--muted)">Email / số hộ chiếu</div>
+            <div style="height: 76px; border: 4px solid var(--ink); border-radius: 14px; margin-top: 12px; padding: 0 22px; display: flex; align-items: center"><div id="st2-f1" style="height: 16px; width: 420px; border-radius: 8px; background: var(--ink); transform-origin: left center"></div></div>
+            <div style="font-size: 30px; font-weight: 800; color: var(--muted); margin-top: 24px">Mã xác minh</div>
+            <div style="height: 76px; border: 4px solid var(--ink); border-radius: 14px; margin-top: 12px; padding: 0 22px; display: flex; align-items: center; gap: 16px"><div id="st2-f2" style="font-size: 40px; font-weight: 900; letter-spacing: 0.3em">••••••</div></div>
+            <div id="st2-btn" style="margin-top: 30px; height: 84px; border-radius: 16px; background: var(--green-dark); color: #fff; font-size: 38px; font-weight: 800; display: flex; align-items: center; justify-content: center">Đăng nhập</div>
+          </div>
+        </div>
+        <!-- step 3 -->
+        <div id="st3" class="abs" style="left: 0; top: 0; width: 1080px; opacity: 0">
+          <div class="headline" style="top: 360px; font-size: 64px; color: var(--navy); text-transform: none"><span style="display:inline-block; width: 92px; height: 92px; border-radius: 50%; background: var(--green-dark); color: #fff; text-align: center; line-height: 92px; font-size: 58px; margin-right: 18px; vertical-align: middle">3</span>Chọn <b style="color: var(--green-dark)">ANYTHING ELSE</b></div>
+          <div class="card" style="left: 60px; top: 520px; width: 880px; padding: 24px 20px">
+            <div class="row" style="opacity: 0.45"><div class="radio"></div><div class="row-text">Right to work</div></div>
+            <div class="row" style="opacity: 0.45"><div class="radio"></div><div class="row-text">Right to rent</div></div>
+            <div class="row" id="st3-row" style="background: #dcfce7"><div class="radio"><div class="radio-dot" id="st3-dot" style="background: var(--green)"></div></div><div><div class="row-text">Anything else</div><div class="row-sub">du lịch / visa Châu Âu</div></div>
+              <svg class="stamp" id="st3-v" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#1fb15a"/><path d="M28 52 L44 68 L73 36" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </div>
+        </div>
+        <!-- step 4 -->
+        <div id="st4" class="abs" style="left: 0; top: 0; width: 1080px; opacity: 0">
+          <div class="headline" style="top: 360px; font-size: 60px; color: var(--navy); text-transform: none"><span style="display:inline-block; width: 92px; height: 92px; border-radius: 50%; background: var(--green-dark); color: #fff; text-align: center; line-height: 92px; font-size: 58px; margin-right: 18px; vertical-align: middle">4</span>Kiểm tra · Tải · In</div>
+          <div class="card" style="left: 60px; top: 520px; width: 880px; padding: 30px 36px 34px">
+            <div style="font-size: 30px; font-weight: 800; color: var(--muted)">Share code của bạn</div>
+            <div style="font-size: 72px; font-weight: 900; letter-spacing: 0.08em; margin-top: 6px">AB1 2CD 3EF</div>
+            <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 22px">
+              <div class="row" style="padding: 12px 0" id="st4-r1"><svg viewBox="0 0 100 100" style="width: 56px; height: 56px; flex: none"><circle cx="50" cy="50" r="46" fill="#1fb15a"/><path d="M28 52 L44 68 L73 36" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="row-text">Ngày hết hạn <b>SAU</b> ngày hẹn</div></div>
+              <div class="row" style="padding: 12px 0" id="st4-r2"><svg viewBox="0 0 100 100" style="width: 56px; height: 56px; flex: none"><circle cx="50" cy="50" r="46" fill="#1fb15a"/><path d="M28 52 L44 68 L73 36" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="row-text">Tải file PDF</div></div>
+              <div class="row" style="padding: 12px 0" id="st4-r3"><svg viewBox="0 0 100 100" style="width: 56px; height: 56px; flex: none"><circle cx="50" cy="50" r="46" fill="#1fb15a"/><path d="M28 52 L44 68 L73 36" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="row-text">In ra mang theo</div></div>
+            </div>
+          </div>
+        </div>
+        <img id="s6-cat" class="mascot" src="public/mascot/mascot_point.png" alt="" style="left: 560px; top: 1060px; height: 330px" />
+        <div class="flash" id="s6-flash"></div>
+      </div>
+
+      <!-- ═════════ SCENE 7 · CTA (34 – 38) ═════════ -->
+      <div id="s7" class="scene clip" data-start="34" data-duration="4" data-track-index="0" style="background: var(--yellow)">
+        <div class="rays" id="s7-rays" data-layout-allow-overflow style="top: 0"></div>
+        <div id="s7-l1" class="headline" style="top: 210px; text-align: center; font-size: 110px; color: var(--navy)">COMMENT</div>
+        <div id="s7-l2" class="headline" data-layout-allow-overlap style="top: 350px; text-align: center; font-size: 180px; white-space: nowrap; color: var(--red); -webkit-text-stroke: 8px #111827; paint-order: stroke fill; text-shadow: 10px 10px 0 #111827">“CODE”</div>
+        <div id="s7-l3" class="abs" style="left: 60px; top: 620px; width: 880px; padding: 22px 24px; border-radius: 26px; background: var(--navy); color: #fff; font-size: 46px; white-space: nowrap; font-weight: 900; text-align: center; border: 5px solid #111827; box-shadow: 8px 8px 0 #111827">👉 Haipals Travel <span style="color: var(--yellow)">check hồ sơ</span></div>
+        <img id="s7-cat" class="mascot" src="public/mascot/mascot_wave.png" alt="" style="left: 250px; top: 780px; height: 600px" />
+      </div>
+
+      <!-- shared overlays -->
+      <svg id="cursor" viewBox="0 0 72 88"><path d="M6 4 L6 70 L22 56 L34 84 L46 78 L34 52 L56 52 Z" fill="#fff" stroke="#111827" stroke-width="6" stroke-linejoin="round" /></svg>
+      <div class="ring" id="ring"></div>
+      <div id="footer">Quy định có thể thay đổi - luôn kiểm tra trên gov.uk</div>
+
+      <!-- audio: music bed + SFX (music and whoosh/buzz/ka-ching synthesised in tools/make_audio.py) -->
+      <audio id="music" src="public/audio/music.wav" data-start="0" data-duration="38" data-track-index="10" data-volume="0.38"></audio>
+      <audio id="sfx-pop-01" src="public/sfx/pop.wav" data-start="0.05" data-duration="0.5" data-track-index="11" data-volume="0.7"></audio>
+      <audio id="sfx-buzz-01" src="public/sfx/buzz.wav" data-start="0.45" data-duration="0.55" data-track-index="12" data-volume="0.45"></audio>
+      <audio id="sfx-snap-01" src="public/sfx/snap.wav" data-start="1.45" data-duration="0.5" data-track-index="11" data-volume="0.8"></audio>
+      <audio id="sfx-pop-02" src="public/sfx/pop.wav" data-start="1.9" data-duration="0.5" data-track-index="13" data-volume="0.6"></audio>
+      <audio id="sfx-whoosh-01" src="public/sfx/whoosh.wav" data-start="2.85" data-duration="0.45" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-snap-02" src="public/sfx/snap.wav" data-start="4.2" data-duration="0.5" data-track-index="11" data-volume="0.8"></audio>
+      <audio id="sfx-buzz-02" src="public/sfx/buzz.wav" data-start="4.3" data-duration="0.55" data-track-index="12" data-volume="0.45"></audio>
+      <audio id="sfx-whoosh-02" src="public/sfx/whoosh.wav" data-start="5.85" data-duration="0.45" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-snap-03" src="public/sfx/snap.wav" data-start="6.8" data-duration="0.5" data-track-index="11" data-volume="0.8"></audio>
+      <audio id="sfx-success-01" src="public/sfx/success.wav" data-start="6.9" data-duration="1" data-track-index="13" data-volume="0.6"></audio>
+      <audio id="sfx-whoosh-03" src="public/sfx/whoosh.wav" data-start="8.85" data-duration="0.45" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-pop-03" src="public/sfx/pop.wav" data-start="9.6" data-duration="0.5" data-track-index="11" data-volume="0.6"></audio>
+      <audio id="sfx-pop-04" src="public/sfx/pop.wav" data-start="10.6" data-duration="0.5" data-track-index="13" data-volume="0.6"></audio>
+      <audio id="sfx-pop-05" src="public/sfx/pop.wav" data-start="11.0" data-duration="0.5" data-track-index="11" data-volume="0.6"></audio>
+      <audio id="sfx-buzz-03" src="public/sfx/buzz.wav" data-start="11.55" data-duration="0.55" data-track-index="12" data-volume="0.45"></audio>
+      <audio id="sfx-tick-01" src="public/sfx/tick.wav" data-start="12.6" data-duration="0.5" data-track-index="13" data-volume="0.7"></audio>
+      <audio id="sfx-whoosh-04" src="public/sfx/whoosh.wav" data-start="13.85" data-duration="0.45" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-pop-06" src="public/sfx/pop.wav" data-start="14.7" data-duration="0.5" data-track-index="11" data-volume="0.6"></audio>
+      <audio id="sfx-buzz-04" src="public/sfx/buzz.wav" data-start="15.5" data-duration="0.55" data-track-index="12" data-volume="0.45"></audio>
+      <audio id="sfx-whoosh-05" src="public/sfx/whoosh.wav" data-start="16.45" data-duration="0.45" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-success-02" src="public/sfx/success.wav" data-start="17.3" data-duration="1" data-track-index="13" data-volume="0.6"></audio>
+      <audio id="sfx-whoosh-06" src="public/sfx/whoosh.wav" data-start="18.85" data-duration="0.45" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-buzz-05" src="public/sfx/buzz.wav" data-start="20.3" data-duration="0.55" data-track-index="12" data-volume="0.45"></audio>
+      <audio id="sfx-kaching-01" src="public/sfx/kaching.wav" data-start="21.7" data-duration="1.1" data-track-index="13" data-volume="0.7"></audio>
+      <audio id="sfx-pop-07" src="public/sfx/pop.wav" data-start="22.6" data-duration="0.5" data-track-index="11" data-volume="0.7"></audio>
+      <audio id="sfx-whoosh-07" src="public/sfx/whoosh.wav" data-start="23.85" data-duration="0.45" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-tick-02" src="public/sfx/tick.wav" data-start="25.7" data-duration="0.5" data-track-index="13" data-volume="0.7"></audio>
+      <audio id="sfx-whoosh-08" src="public/sfx/whoosh.wav" data-start="26.35" data-duration="0.45" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-snap-04" src="public/sfx/snap.wav" data-start="28.1" data-duration="0.5" data-track-index="11" data-volume="0.8"></audio>
+      <audio id="sfx-whoosh-09" src="public/sfx/whoosh.wav" data-start="28.85" data-duration="0.45" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-snap-05" src="public/sfx/snap.wav" data-start="29.8" data-duration="0.5" data-track-index="11" data-volume="0.8"></audio>
+      <audio id="sfx-tick-03" src="public/sfx/tick.wav" data-start="30.0" data-duration="0.5" data-track-index="13" data-volume="0.7"></audio>
+      <audio id="sfx-whoosh-10" src="public/sfx/whoosh.wav" data-start="31.35" data-duration="0.45" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-tick-04" src="public/sfx/tick.wav" data-start="32.3" data-duration="0.5" data-track-index="13" data-volume="0.7"></audio>
+      <audio id="sfx-tick-05" src="public/sfx/tick.wav" data-start="32.8" data-duration="0.5" data-track-index="11" data-volume="0.7"></audio>
+      <audio id="sfx-tick-06" src="public/sfx/tick.wav" data-start="33.3" data-duration="0.5" data-track-index="13" data-volume="0.7"></audio>
+      <audio id="sfx-whoosh-11" src="public/sfx/whoosh.wav" data-start="33.85" data-duration="0.45" data-track-index="14" data-volume="0.6"></audio>
+      <audio id="sfx-pop-08" src="public/sfx/pop.wav" data-start="34.2" data-duration="0.5" data-track-index="11" data-volume="0.7"></audio>
+      <audio id="sfx-pop-09" src="public/sfx/pop.wav" data-start="34.6" data-duration="0.5" data-track-index="13" data-volume="0.7"></audio>
+      <audio id="sfx-kaching-02" src="public/sfx/kaching.wav" data-start="35.2" data-duration="1.1" data-track-index="12" data-volume="0.5"></audio>
+    </div>
+
+    <script>
+      (function () {
+        const tl = gsap.timeline({ paused: true });
+        const FPS = 30;
+        const q = (t) => Math.round(t * FPS) / FPS;
+        const slam = (sel, at, from) =>
+          tl.fromTo(sel, Object.assign({ opacity: 0, scale: 1.6 }, from || {}), { opacity: 1, scale: 1, x: 0, y: 0, duration: 0.28, ease: "power4.out" }, q(at));
+        const pop = (sel, at, dur) =>
+          tl.fromTo(sel, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: dur || 0.4, ease: "back.out(2.5)" }, q(at));
+        const riseIn = (sel, at) =>
+          tl.fromTo(sel, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, q(at));
+        const catIn = (sel, at) => {
+          tl.fromTo(sel, { opacity: 0, y: 120, scaleY: 0.7, scaleX: 1.15 }, { opacity: 1, y: 0, scaleY: 1, scaleX: 1, duration: 0.45, ease: "back.out(2.2)" }, q(at));
+        };
+        const bob = (sel, at, dur) => {
+          const reps = Math.max(1, Math.floor(dur / 0.47) - 1);
+          tl.to(sel, { y: -14, duration: 0.235, ease: "sine.inOut", yoyo: true, repeat: reps }, q(at));
+        };
+        const flashCut = (flashSel, camSel, at) => {
+          tl.fromTo(flashSel, { opacity: 0.85 }, { opacity: 0, duration: 0.22, ease: "power2.out" }, q(at));
+          if (camSel) tl.fromTo(camSel, { scale: 1.12 }, { scale: 1, duration: 0.35, ease: "power3.out" }, q(at));
+        };
+        const cursorTo = (x, y, at, dur) => tl.to("#cursor", { x, y, duration: dur || 0.45, ease: "power2.inOut" }, q(at));
+        const click = (x, y, at) => {
+          tl.to("#cursor", { scale: 0.82, duration: 0.08, yoyo: true, repeat: 1, transformOrigin: "10% 5%" }, q(at));
+          tl.set("#ring", { x: x - 60, y: y - 60 }, q(at));
+          tl.fromTo("#ring", { opacity: 1, scale: 0.3 }, { opacity: 0, scale: 1.4, duration: 0.4, ease: "power2.out", immediateRender: false }, q(at));
+        };
+
+        // ── initial states ──
+        tl.set(["#s2-x1", "#s2-x2", "#s2-v3", "#s2-d1", "#s2-d3"], { scale: 0, opacity: 0 }, 0);
+        tl.set("#cursor", { x: 980, y: 1500, opacity: 0 }, 0);
+
+        // ═══ S1 Hook 0–3 ═══
+        tl.fromTo("#s1-rays", { rotation: 0 }, { rotation: 40, duration: 3, ease: "none" }, 0);
+        pop("#s1-x", 0.05, 0.35);
+        slam("#s1-big", 0.4);
+        tl.fromTo("#s1-big", { x: -8 }, { x: 8, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, q(0.68));
+        tl.set("#s1-big", { x: 0 }, q(1.0));
+        slam("#s1-sub", 0.9, { scale: 0.6, y: 40 });
+        catIn("#s1-cat", 0.2);
+        bob("#s1-cat", 0.7, 2.2);
+        tl.set("#cursor", { x: 760, y: 1000, opacity: 1 }, q(1.0));
+        cursorTo(700, 830, 1.0, 0.4);
+        click(704, 834, 1.45);
+        tl.to("#cursor", { opacity: 0, duration: 0.15 }, q(2.6));
+        pop("#s1-chip", 1.9, 0.35);
+        tl.fromTo("#footer", { opacity: 0 }, { opacity: 1, duration: 0.3 }, q(0.3));
+
+        // ═══ S2 Lỗi 1 3–9 ═══
+        flashCut("#s2-flash", "#s2-cam", 3.0);
+        pop("#s2-chip", 3.05, 0.3);
+        slam("#s2-h1", 3.15, { scale: 1.3 });
+        riseIn("#s2-card", 3.3);
+        catIn("#s2-cat-a", 3.4);
+        tl.set("#cursor", { x: 980, y: 1300, opacity: 1 }, q(3.5));
+        cursorTo(118, 690, 3.6, 0.55);
+        click(122, 694, 4.2);
+        tl.to("#s2-d1", { scale: 1, opacity: 1, duration: 0.15 }, q(4.2));
+        tl.to("#s2-r1", { backgroundColor: "#ffe4e8", duration: 0.15 }, q(4.2));
+        pop("#s2-x1", 4.3, 0.3);
+        pop("#s2-x2", 4.5, 0.3);
+        tl.to("#s2-r2", { backgroundColor: "#ffe4e8", duration: 0.15 }, q(4.5));
+        tl.fromTo("#s2-card", { x: -14 }, { x: 14, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, q(4.3));
+        tl.set("#s2-card", { x: 0 }, q(4.62));
+        riseIn("#s2-cap1", 4.6);
+        // cut → correct answer
+        flashCut("#s2-flash", "#s2-cam", 6.0);
+        tl.to("#s2-h1", { opacity: 0, duration: 0.1 }, q(6.0));
+        tl.set("#s2-h2", { opacity: 1 }, q(6.0));
+        slam("#s2-h2", 6.0, { scale: 1.3 });
+        tl.to("#s2-cap1", { opacity: 0, duration: 0.1 }, q(6.0));
+        tl.to("#s2-cat-a", { opacity: 0, duration: 0.1 }, q(6.0));
+        catIn("#s2-cat-b", 6.05);
+        tl.to(["#s2-r1", "#s2-r2"], { opacity: 0.45, duration: 0.2 }, q(6.1));
+        cursorTo(118, 950, 6.2, 0.5);
+        click(122, 954, 6.8);
+        tl.to("#s2-d1", { scale: 0, opacity: 0, duration: 0.1 }, q(6.8));
+        tl.to("#s2-d3", { scale: 1, opacity: 1, duration: 0.15 }, q(6.8));
+        tl.to("#s2-r3", { backgroundColor: "#dcfce7", duration: 0.15 }, q(6.8));
+        pop("#s2-v3", 6.9, 0.35);
+        tl.set("#s2-cap2", { opacity: 1 }, q(7.1));
+        riseIn("#s2-cap2", 7.1);
+        bob("#s2-cat-b", 6.6, 2.2);
+        tl.to("#cursor", { opacity: 0, duration: 0.15 }, q(8.6));
+
+        // ═══ S3 Lỗi 2 9–14 ═══
+        flashCut("#s3-flash", "#s3-cam", 9.0);
+        pop("#s3-chip", 9.05, 0.3);
+        slam("#s3-h", 9.15, { scale: 1.3 });
+        riseIn("#s3-card", 9.3);
+        tl.set(["#s3-m1", "#s3-m2", "#s3-m3", "#s3-warn", "#s3-gap"], { opacity: 0 }, q(9.0));
+        tl.set("#s3-valid", { scaleX: 0 }, q(9.0));
+        pop("#s3-m1", 9.6, 0.35);
+        tl.to("#s3-valid", { scaleX: 1, duration: 0.9, ease: "power1.inOut" }, q(9.75));
+        pop("#s3-m2", 10.6, 0.35);
+        pop("#s3-m3", 11.0, 0.35);
+        flashCut("#s3-flash", "#s3-cam", 11.5);
+        tl.fromTo("#s3-gap", { opacity: 0, scaleX: 0, transformOrigin: "left center" }, { opacity: 1, scaleX: 1, duration: 0.3, ease: "power3.out" }, q(11.55));
+        slam("#s3-warn", 11.6, { scale: 1.4 });
+        tl.fromTo("#s3-card", { x: -14 }, { x: 14, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, q(11.6));
+        tl.set("#s3-card", { x: 0 }, q(11.92));
+        catIn("#s3-cat", 9.4);
+        bob("#s3-cat", 9.9, 3.9);
+        tl.set("#s3-cap", { opacity: 0 }, q(9.0));
+        riseIn("#s3-cap", 12.6);
+
+        // ═══ S4 Lỗi 3 14–19 ═══
+        flashCut("#s4-flash", "#s4-cam", 14.0);
+        pop("#s4-chip", 14.05, 0.3);
+        slam("#s4-h", 14.15, { scale: 1.3 });
+        tl.set(["#s4-oldx", "#s4-new", "#s4-newv", "#s4-cap"], { opacity: 0 }, q(14.0));
+        tl.set("#s4-link-new", { strokeDasharray: 400, strokeDashoffset: 400 }, q(14.0));
+        riseIn("#s4-evisa", 14.4);
+        riseIn("#s4-old", 14.7);
+        tl.fromTo("#s4-link-old", { opacity: 0 }, { opacity: 1, duration: 0.3 }, q(14.9));
+        pop("#s4-oldx", 15.5, 0.3);
+        tl.fromTo("#s4-old", { rotation: 0 }, { rotation: -4, duration: 0.06, yoyo: true, repeat: 5 }, q(15.5));
+        catIn("#s4-cat", 14.5);
+        bob("#s4-cat", 15.0, 3.8);
+        flashCut("#s4-flash", "#s4-cam", 16.5);
+        tl.to("#s4-link-old", { opacity: 0.15, duration: 0.2 }, q(16.5));
+        tl.to("#s4-old", { opacity: 0.4, duration: 0.2 }, q(16.5));
+        tl.fromTo("#s4-new", { opacity: 0, x: 200 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, q(16.6));
+        tl.to("#s4-link-new", { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" }, q(16.95));
+        pop("#s4-newv", 17.3, 0.35);
+        tl.set("#s4-cap", { opacity: 1 }, q(17.4));
+        riseIn("#s4-cap", 17.4);
+
+        // ═══ S5 Hậu quả 19–24 ═══
+        flashCut("#s5-flash", "#s5-cam", 19.0);
+        pop("#s5-chip", 19.05, 0.3);
+        slam("#s5-h", 19.15, { scale: 1.3 });
+        tl.set(["#s5-warn", "#s5-receipt", "#s5-stamp"], { opacity: 0 }, q(19.0));
+        pop("#s5-warn", 20.3, 0.35);
+        tl.fromTo("#s5-receipt", { opacity: 0, y: 300, rotation: 12 }, { opacity: 1, y: 0, rotation: 3, duration: 0.45, ease: "back.out(1.8)" }, q(21.4));
+        tl.fromTo("#s5-amount", { scale: 1 }, { scale: 1.18, duration: 0.12, yoyo: true, repeat: 1 }, q(21.75));
+        tl.fromTo("#s5-stamp", { opacity: 0, scale: 2.4, rotation: -20 }, { opacity: 1, scale: 1, rotation: -8, duration: 0.25, ease: "power4.out" }, q(22.6));
+        tl.fromTo("#s5-cam", { x: -10 }, { x: 10, duration: 0.05, yoyo: true, repeat: 3, ease: "none" }, q(22.65));
+        tl.set("#s5-cam", { x: 0 }, q(22.85));
+        catIn("#s5-cat", 19.4);
+        tl.to("#s5-cat", { rotation: -4, duration: 0.6, yoyo: true, repeat: 6, ease: "sine.inOut" }, q(19.9));
+
+        // ═══ S6 4 bước 24–34 ═══
+        flashCut("#s6-flash", null, 24.0);
+        pop("#s6-chip", 24.05, 0.3);
+        tl.fromTo("#s6-prog", { scaleX: 0 }, { scaleX: 0.25, duration: 0.4, ease: "power2.out" }, q(24.1));
+        catIn("#s6-cat", 24.3);
+        bob("#s6-cat", 24.8, 9.0);
+        // step 1
+        tl.fromTo("#st1", { opacity: 0, x: 120 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, q(24.1));
+        tl.to("#st1-type", { clipPath: "inset(0 0% 0 0)", duration: 1.2, ease: "steps(38)" }, q(24.5));
+        tl.set("#st1-cap", { opacity: 0 }, q(24.0));
+        riseIn("#st1-cap", 25.7);
+        // step 2
+        tl.to("#st1", { opacity: 0, x: -120, duration: 0.2, ease: "power2.in" }, q(26.35));
+        flashCut("#s6-flash", null, 26.5);
+        tl.to("#s6-prog", { scaleX: 0.5, duration: 0.4, ease: "power2.out" }, q(26.5));
+        tl.fromTo("#st2", { opacity: 0, x: 120 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, q(26.5));
+        tl.fromTo("#st2-f1", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "steps(12)" }, q(26.9));
+        tl.fromTo("#st2-f2", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.45, ease: "steps(6)" }, q(27.45));
+        tl.set("#cursor", { x: 980, y: 1300, opacity: 0 }, q(27.3));
+        tl.to("#cursor", { opacity: 1, duration: 0.1 }, q(27.4));
+        cursorTo(500, 1010, 27.45, 0.6);
+        click(504, 1014, 28.1);
+        tl.fromTo("#st2-btn", { scale: 1 }, { scale: 0.94, duration: 0.08, yoyo: true, repeat: 1 }, q(28.1));
+        tl.to("#cursor", { opacity: 0, duration: 0.1 }, q(28.75));
+        // step 3
+        tl.to("#st2", { opacity: 0, x: -120, duration: 0.2, ease: "power2.in" }, q(28.85));
+        flashCut("#s6-flash", null, 29.0);
+        tl.to("#s6-prog", { scaleX: 0.75, duration: 0.4, ease: "power2.out" }, q(29.0));
+        tl.fromTo("#st3", { opacity: 0, x: 120 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, q(29.0));
+        tl.set(["#st3-dot", "#st3-v"], { scale: 0, opacity: 0 }, q(29.0));
+        tl.set("#cursor", { x: 980, y: 1200, opacity: 0 }, q(29.2));
+        tl.to("#cursor", { opacity: 1, duration: 0.1 }, q(29.25));
+        cursorTo(116, 830, 29.3, 0.45);
+        click(120, 834, 29.8);
+        tl.to("#st3-dot", { scale: 1, opacity: 1, duration: 0.15 }, q(29.8));
+        pop("#st3-v", 30.0, 0.3);
+        tl.to("#cursor", { opacity: 0, duration: 0.1 }, q(31.2));
+        // step 4
+        tl.to("#st3", { opacity: 0, x: -120, duration: 0.2, ease: "power2.in" }, q(31.35));
+        flashCut("#s6-flash", null, 31.5);
+        tl.to("#s6-prog", { scaleX: 1, duration: 0.4, ease: "power2.out" }, q(31.5));
+        tl.fromTo("#st4", { opacity: 0, x: 120 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, q(31.5));
+        tl.set(["#st4-r1", "#st4-r2", "#st4-r3"], { opacity: 0 }, q(31.5));
+        riseIn("#st4-r1", 32.3);
+        riseIn("#st4-r2", 32.8);
+        riseIn("#st4-r3", 33.3);
+
+        // ═══ S7 CTA 34–38 ═══
+        tl.fromTo("#s7-rays", { rotation: 0 }, { rotation: 50, duration: 4, ease: "none" }, q(34));
+        slam("#s7-l1", 34.15, { scale: 1.4 });
+        slam("#s7-l2", 34.5, { scale: 2 });
+        tl.fromTo("#s7-l2", { rotation: -3 }, { rotation: 3, duration: 0.3, yoyo: true, repeat: 9, ease: "sine.inOut" }, q(34.8));
+        pop("#s7-l3", 35.1, 0.45);
+        catIn("#s7-cat", 34.2);
+        tl.to("#s7-cat", { rotation: 4, duration: 0.35, yoyo: true, repeat: 8, ease: "sine.inOut", transformOrigin: "50% 100%" }, q(34.7));
+
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      })();
+    </script>
+  </body>
+</html>
