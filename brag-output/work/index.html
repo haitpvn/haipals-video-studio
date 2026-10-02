@@ -1,0 +1,260 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts-local.css">
+<style>
+:root{--cream:#FFF6EC;--red:#E5402B;--ink:#141414;--sky:#BFE3F7;--pink:#FDE1DA;--wood:#F4E2C6;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--cream);font-family:'Be Vietnam Pro',sans-serif;color:var(--ink)}
+.scene{position:absolute;inset:0;overflow:hidden;visibility:hidden}
+.abs{position:absolute}
+.script{font-family:'Pacifico',cursive;font-weight:400}
+/* S1 */
+#s1 .bg{position:absolute;inset:0;background:url(cat.png) center/cover;transform-origin:50% 0%}
+#s1 .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,12,8,.55) 0%,rgba(20,12,8,0) 34%,rgba(20,12,8,0) 70%,rgba(20,12,8,.35) 100%)}
+#hookcard{left:70px;right:70px;top:230px;background:var(--cream);border-radius:44px;padding:52px 58px 58px;box-shadow:0 30px 70px rgba(0,0,0,.28)}
+#hookcard .t{font-size:80px;font-weight:900;line-height:1.16;letter-spacing:-1px}
+#hookcard .w{display:inline-block}
+#hookcard .red{color:var(--red)}
+#hooktag{left:70px;top:150px;font-size:38px;font-weight:700;color:#fff;letter-spacing:.5px}
+/* S2 */
+.skybg{position:absolute;inset:0;background:linear-gradient(180deg,#A9DAF5 0%,#D7EEF9 45%,var(--cream) 82%)}
+.cloud{position:absolute;background:#fff;border-radius:50%;filter:blur(6px);opacity:.85}
+#s2 .mark{left:50%;top:400px;width:250px;margin-left:-125px}
+#s2 .w1{left:0;right:0;top:700px;text-align:center;font-size:200px;line-height:1;color:var(--ink)}
+#s2 .w2{left:0;right:0;top:940px;text-align:center;font-size:220px;line-height:1;color:var(--red)}
+#s2 .pill{left:50%;top:1330px;transform:translateX(-50%);white-space:nowrap;background:var(--pink);color:var(--red);font-weight:900;font-size:54px;letter-spacing:3px;padding:26px 52px;border-radius:999px}
+#s2 svg.fly{position:absolute;left:0;top:0}
+/* S3 */
+#s3 h2{position:absolute;left:100px;top:300px;font-size:104px;font-weight:900;letter-spacing:-2px}
+#s3 .swash{position:absolute;left:96px;top:440px}
+.card{position:absolute;left:100px;width:880px;height:190px;background:#fff;border-radius:40px;box-shadow:0 18px 40px rgba(120,60,30,.12);display:flex;align-items:center;padding:0 44px}
+.card .ic{width:112px;height:112px;border-radius:30px;background:var(--pink);display:flex;align-items:center;justify-content:center;flex:none}
+.card .lb{font-size:66px;font-weight:800;margin-left:40px;flex:1}
+.card .ck{width:92px;height:92px;border-radius:50%;border:6px solid #E9DCCD;position:relative;flex:none}
+.card .ck .fill{position:absolute;inset:-6px;border-radius:50%;background:var(--red)}
+.card .ck svg{position:absolute;inset:-6px}
+.ripple{position:absolute;border-radius:50%;border:6px solid var(--red)}
+/* S4 */
+#pole{left:526px;top:430px;width:28px;height:1400px;background:linear-gradient(90deg,#7A4A22,#A8703C 50%,#7A4A22);border-radius:10px}
+.board{position:absolute;height:132px;width:600px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:66px;letter-spacing:3px;filter:drop-shadow(0 10px 14px rgba(80,40,10,.25))}
+.board.r{left:520px;clip-path:polygon(0 0,88% 0,100% 50%,88% 100%,0 100%);padding-right:50px;transform-origin:4% 50%}
+.board.l{left:-40px;clip-path:polygon(12% 0,100% 0,100% 100%,12% 100%,0 50%);padding-left:50px;transform-origin:96% 50%}
+.board.c{background:var(--wood);color:var(--ink)}
+.board.k{background:var(--red);color:#fff}
+#s4 .topcat{left:50%;top:180px;width:230px;margin-left:-115px}
+#ground{left:-100px;right:-100px;top:1700px;height:400px;background:#CFE7B8;border-radius:50% 50% 0 0}
+/* S5 */
+#s5{background:linear-gradient(180deg,#FBE9DE,var(--cream))}
+#phone{left:60px;right:60px;top:170px;height:1520px;background:#fff;border-radius:56px;box-shadow:0 30px 80px rgba(120,60,30,.18);overflow:hidden}
+#phone .hd{height:190px;display:flex;align-items:center;padding:0 44px;border-bottom:3px solid #F2E9E0}
+#phone .av{width:116px;height:116px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;flex:none}
+#phone .av img{height:84px;filter:brightness(0) invert(1)}
+#phone .nm{margin-left:30px}
+#phone .nm b{display:block;font-size:50px;font-weight:800}
+#phone .nm span{font-size:34px;color:#4C9A54;font-weight:700}
+#phone .nm span:before{content:'';display:inline-block;width:20px;height:20px;border-radius:50%;background:#4CC35A;margin-right:12px;vertical-align:1px}
+.msg{position:absolute;max-width:900px;font-size:54px;line-height:1.28;font-weight:600;padding:30px 42px;border-radius:44px}
+.msg.me{right:44px;background:var(--red);color:#fff;border-bottom-right-radius:12px}
+.msg.them{left:44px;background:#F3ECE4;color:var(--ink);border-bottom-left-radius:12px}
+.dots{position:absolute;left:44px;background:#F3ECE4;border-radius:40px;padding:34px 40px;display:flex;gap:16px}
+.dots i{width:22px;height:22px;border-radius:50%;background:#A99A8A;display:block}
+#inbar{position:absolute;left:36px;right:36px;bottom:36px;height:130px;border-radius:66px;background:#F6F0EA;display:flex;align-items:center;padding:0 20px 0 50px}
+#inbar .tx{flex:1;font-size:46px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden}
+#inbar .ph{color:#B3A698}
+#inbar .send{width:96px;height:96px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center}
+/* S6 */
+#s6 .logo{left:50%;top:430px;width:900px;margin-left:-450px}
+#s6 .tag{left:0;right:0;top:820px;text-align:center;font-size:104px;color:var(--red);line-height:1.2}
+#s6 .cta{left:50%;top:1110px;transform:translateX(-50%);background:var(--ink);color:#fff;font-weight:800;font-size:62px;padding:36px 74px;border-radius:999px;white-space:nowrap}
+#s6 .h{left:0;right:0;top:1360px;text-align:center;font-size:60px;font-weight:900}
+#s6 .h2{left:0;right:0;top:1450px;text-align:center;font-size:40px;font-weight:600;color:#6B5E52}
+.heart{position:absolute;color:var(--red);font-size:60px}
+#wipe{position:absolute;inset:0;pointer-events:none}
+</style></head>
+<body>
+
+<!-- S1 HOOK -->
+<div class="scene" id="s1">
+  <div class="bg"></div><div class="shade"></div>
+  <div class="abs" id="hooktag">Haipals Đi Đâu</div>
+  <div class="abs" id="hookcard"><div class="t">
+    <span class="w">Cầm</span> <span class="w">hộ</span> <span class="w">chiếu</span> <span class="w">mà</span><br>
+    <span class="w">chưa</span> <span class="w">biết</span> <span class="w">bắt</span> <span class="w">đầu</span><br>
+    <span class="w red">từ</span> <span class="w red">đâu?</span></div></div>
+</div>
+
+<!-- S2 REVEAL -->
+<div class="scene" id="s2">
+  <div class="skybg"></div>
+  <div class="cloud" style="left:-60px;top:240px;width:380px;height:120px"></div>
+  <div class="cloud" style="left:760px;top:520px;width:420px;height:130px"></div>
+  <div class="cloud" style="left:120px;top:1050px;width:300px;height:90px"></div>
+  <svg class="fly" width="1080" height="1920"><path id="trail2" d="M -80 1210 C 250 1280, 520 1250, 700 1160 S 980 960, 1180 920" fill="none" stroke="#E5402B" stroke-width="7" stroke-dasharray="18 18" stroke-linecap="round"/>
+    <g id="plane2"><path d="M-46 -6 L20 -6 L44 -26 L56 -26 L42 -6 L62 -6 Q74 0 62 6 L42 6 L56 26 L44 26 L20 6 L-46 6 L-56 22 L-66 22 L-60 0 L-66 -22 L-56 -22 Z" fill="#E5402B"/></g></svg>
+  <img class="abs mark" src="logo-cat.svg">
+  <div class="abs w1 script">Haipals</div>
+  <div class="abs w2 script">Đi Đâu</div>
+  <div class="abs pill">VISA • DU LỊCH • VÉ MÁY BAY</div>
+</div>
+
+<!-- S3 LO HET -->
+<div class="scene" id="s3">
+  <h2 id="h3">Bên mình lo hết:</h2>
+  <svg class="swash" width="700" height="60"><path id="sw" d="M6 34 C 160 8, 420 6, 690 30" fill="none" stroke="#E5402B" stroke-width="14" stroke-linecap="round"/></svg>
+  <div class="card" id="c0"><div class="ic"><svg width="70" height="70" viewBox="0 0 70 70" fill="none" stroke="#E5402B" stroke-width="6" stroke-linejoin="round"><rect x="12" y="5" width="46" height="60" rx="7"/><circle cx="35" cy="30" r="12"/><path d="M23 30h24M35 18c-6 7-6 17 0 24M35 18c6 7 6 17 0 24M24 52h22"/></svg></div><div class="lb">Visa</div><div class="ck"><div class="fill"></div><svg width="92" height="92" viewBox="0 0 92 92"><path d="M26 47 L40 61 L67 33" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+  <div class="card" id="c1"><div class="ic"><svg width="70" height="70" viewBox="0 0 70 70" fill="none" stroke="#E5402B" stroke-width="6" stroke-linejoin="round"><path d="M6 18 a6 6 0 0 1 6-6 h16 l7 8 h23 a6 6 0 0 1 6 6 v28 a6 6 0 0 1-6 6 h-46 a6 6 0 0 1-6-6z"/><path d="M6 30h58"/></svg></div><div class="lb">Hồ sơ</div><div class="ck"><div class="fill"></div><svg width="92" height="92" viewBox="0 0 92 92"><path d="M26 47 L40 61 L67 33" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+  <div class="card" id="c2"><div class="ic"><svg width="74" height="74" viewBox="-70 -40 140 80"><path d="M-46 -6 L20 -6 L44 -26 L56 -26 L42 -6 L62 -6 Q74 0 62 6 L42 6 L56 26 L44 26 L20 6 L-46 6 L-56 22 L-66 22 L-60 0 L-66 -22 L-56 -22 Z" fill="#E5402B" transform="rotate(-20)"/></svg></div><div class="lb">Vé máy bay</div><div class="ck"><div class="fill"></div><svg width="92" height="92" viewBox="0 0 92 92"><path d="M26 47 L40 61 L67 33" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+  <div class="card" id="c3"><div class="ic"><svg width="74" height="74" viewBox="0 0 74 74" fill="none" stroke="#E5402B" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14v48M6 46h62v16M68 46v-8a8 8 0 0 0-8-8H32v16"/><circle cx="19" cy="36" r="7"/></svg></div><div class="lb">Khách sạn</div><div class="ck"><div class="fill"></div><svg width="92" height="92" viewBox="0 0 92 92"><path d="M26 47 L40 61 L67 33" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+  <div class="ripple" id="rip"></div>
+</div>
+
+<!-- S4 SIGNPOST -->
+<div class="scene" id="s4">
+  <div class="skybg"></div>
+  <svg class="abs" style="left:0;top:0" width="1080" height="420"><path id="hpath" d="M 1180 330 C 900 330, 760 300, 700 230 C 640 150, 760 80, 820 150 C 880 80, 1000 150, 940 230 C 880 300, 600 340, -120 300" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round"/>
+    <g id="plane4"><path d="M-46 -6 L20 -6 L44 -26 L56 -26 L42 -6 L62 -6 Q74 0 62 6 L42 6 L56 26 L44 26 L20 6 L-46 6 L-56 22 L-66 22 L-60 0 L-66 -22 L-56 -22 Z" fill="#E5402B"/></g></svg>
+  <div class="abs" id="ground"></div>
+  <div class="abs" id="pole"></div>
+  <img class="abs topcat" src="logo-cat.svg">
+  <div class="board r c" id="b0" style="top:480px">THAILAND</div>
+  <div class="board l k" id="b1" style="top:650px">JAPAN</div>
+  <div class="board r c" id="b2" style="top:820px">KOREA</div>
+  <div class="board l k" id="b3" style="top:990px">EUROPE</div>
+  <div class="board r c" id="b4" style="top:1160px">USA</div>
+  <div class="board l k" id="b5" style="top:1330px;font-size:54px;white-space:nowrap;letter-spacing:1px">AND BEYOND ♥</div>
+</div>
+
+<!-- S5 CHAT -->
+<div class="scene" id="s5">
+  <div class="abs" id="phone">
+    <div class="hd"><div class="av"><img src="logo-cat.svg"></div><div class="nm"><b>Haipals Đi Đâu</b><span>Đang hoạt động</span></div></div>
+    <div class="msg me" id="m0" style="top:250px">Cho mình hỏi về visa với ạ</div>
+    <div class="dots" id="d1" style="top:420px"><i></i><i></i><i></i></div>
+    <div class="msg them" id="m1" style="top:420px">Có một bạn riêng đồng hành,</div>
+    <div class="dots" id="d2" style="top:590px"><i></i><i></i><i></i></div>
+    <div class="msg them" id="m2" style="top:590px">hỏi gì cũng trả lời, không để bạn tự mò.</div>
+    <div class="dots" id="d3" style="top:830px"><i></i><i></i><i></i></div>
+    <div class="msg them" id="m3" style="top:830px">Tư vấn thật lòng, không phí ẩn <span style="color:#E5402B">♥</span></div>
+    <div id="inbar"><div class="tx" id="intx"></div><div class="send"><svg width="50" height="50" viewBox="0 0 50 50"><path d="M8 25 L42 8 L34 42 L24 30 Z" fill="#fff"/></svg></div></div>
+  </div>
+</div>
+
+<!-- S6 OUTRO -->
+<div class="scene" id="s6">
+  <div class="heart" id="hh0" style="left:140px">♥</div><div class="heart" id="hh1" style="left:860px">♥</div><div class="heart" id="hh2" style="left:520px">♥</div>
+  <img class="abs logo" src="logo-wide.svg">
+  <div class="abs tag script">Đi xa hơn, cùng bạn.</div>
+  <div class="abs cta">Inbox ngay nha →</div>
+  <div class="abs h">@haipals</div>
+  <div class="abs h2">Facebook · Instagram · TikTok · haipals.co.uk</div>
+</div>
+
+<svg id="wipe" width="1080" height="1920"><circle id="wc" cx="540" cy="1920" r="0" fill="#E5402B"/></svg>
+
+<script>
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const p=(t,a,b)=>cl((t-a)/(b-a));
+const eo=x=>1-Math.pow(1-x,3);
+const eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{const c=1.7;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const lerp=(a,b,x)=>a+(b-a)*x;
+const S=[[0,4.0],[4.0,7.0],[7.0,11.0],[11.0,14.0],[14.0,20.0],[20.0,23.5]];
+function show(i,t){const [a,b]=S[i];const on=t>=a&&t<b;$('s'+(i+1)).style.visibility=on?'visible':'hidden';return on;}
+function pop(el,t,t0,dur=.35,dy=40){const x=p(t,t0,t0+dur);el.style.opacity=cl(x*2.2);el.style.transform=`translateY(${(1-eo(x))*dy}px) scale(${lerp(.92,1,back(x))})`;}
+function out(el,t,t1,dur=.18){ if(t>t1-dur){const x=p(t,t1-dur,t1);el.style.opacity=Math.min(+el.style.opacity||1,1-x);} }
+function pathPos(path,frac){const L=path.getTotalLength();const a=path.getPointAtLength(L*frac),b=path.getPointAtLength(Math.min(L,L*frac+2));return [a.x,a.y,Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI];}
+
+window.render=function(t){
+  // S1
+  if(show(0,t)){
+    const bg=document.querySelector('#s1 .bg'); bg.style.transform=`scale(${1.12+0.07*eio(p(t,0,4))})`;
+    const ws=document.querySelectorAll('#hookcard .w');
+    ws.forEach((w,i)=>{const x=p(t,0.2+i*0.075,0.2+i*0.075+0.3);w.style.opacity=cl(x*2.5);w.style.transform=`translateY(${(1-eo(x))*30}px)`;});
+    pop($('hookcard'),t,0.05,.4,60); pop($('hooktag'),t,0.0,.4,20);
+    // the question mark nudge
+    const q=ws[ws.length-1]; if(t>1.2){const k=Math.sin((t-1.2)*6)*Math.exp(-(t-1.2)*1.2);q.style.transform=`rotate(${k*8}deg)`;}
+  }
+  // iris wipe 3.82 -> 4.18 : red circle grows, then shrinks away revealing S2
+  const wc=$('wc');
+  if(t>3.82&&t<4.36){const g=p(t,3.82,4.04),s=p(t,4.04,4.36);wc.setAttribute('r',t<4.04?eio(g)*2250:2250);wc.setAttribute('cx',540);wc.style.opacity=t<4.04?1:1-eo(s);}
+  else wc.setAttribute('r',0);
+  // S2
+  if(show(1,t)){
+    const L=$('trail2').getTotalLength();const f=eio(p(t,4.15,5.5));
+    $('trail2').style.strokeDasharray=`18 18`;$('trail2').style.clipPath='';
+    $('trail2').setAttribute('stroke-dashoffset',0);
+    $('trail2').style.opacity=1;
+    // reveal trail behind plane using a mask-like trick: dasharray of length
+    $('trail2').style.strokeDasharray=`18 18`;
+    const [x,y,a]=pathPos($('trail2'),f); $('plane2').setAttribute('transform',`translate(${x},${y}) rotate(${a})`);
+    $('trail2').style.clipPath=`inset(0 ${1080-x}px 0 0)`;
+    pop(document.querySelector('#s2 .mark'),t,4.12,.45,80);
+    pop(document.querySelector('#s2 .w1'),t,4.3,.4,60);
+    const w2=document.querySelector('#s2 .w2');pop(w2,t,4.5,.42,60);w2.style.transform+=` rotate(-4deg)`;
+    const pl=document.querySelector('#s2 .pill');const x2=p(t,4.8,5.2);pl.style.opacity=cl(x2*2);pl.style.transform=`translateX(-50%) scale(${lerp(.85,1,back(x2))})`;
+    document.querySelectorAll('#s2 .cloud').forEach((c,i)=>c.style.transform=`translateX(${(t-4)*(i%2?-14:18)}px)`);
+    ['#s2 .mark','#s2 .w1','#s2 .w2','#s2 .pill'].forEach(s=>out(document.querySelector(s),t,7.0,.2));
+  }
+  // S3
+  if(show(2,t)){
+    pop($('h3'),t,7.02,.35,50); out($('h3'),t,11.0);
+    const sw=$('sw');const L=sw.getTotalLength();sw.style.strokeDasharray=L;sw.style.strokeDashoffset=L*(1-eo(p(t,7.25,7.65)));
+    sw.parentNode.style.opacity=t>10.82?1-p(t,10.82,11):1;
+    for(let i=0;i<4;i++){
+      const c=$('c'+i);c.style.top=(590+i*230)+'px';
+      const x=p(t,7.12+i*0.1,7.12+i*0.1+0.4);c.style.opacity=cl(x*2);c.style.transform=`translateX(${(1-eo(x))*260}px)`;
+      out(c,t,11.0,.2);
+      const tk=7.5+i*0.5; const k=p(t,tk,tk+.22);
+      const fill=c.querySelector('.fill');fill.style.transform=`scale(${back(k)})`;fill.style.opacity=k>0?1:0;
+      const ck=c.querySelector('svg');const pth=ck.querySelector('path');pth.style.strokeDasharray=60;pth.style.strokeDashoffset=60*(1-eo(p(t,tk+.06,tk+.26)));
+      c.querySelector('.ck').style.borderColor=k>0?'#E5402B':'#E9DCCD';
+      c.style.boxShadow=k>0?`0 18px 40px rgba(229,64,43,${.18*Math.exp(-(t-tk)*2)+.10})`:'';
+    }
+    // tap ripple
+    const rp=$('rip');let shown=false;
+    for(let i=0;i<4;i++){const tk=7.5+i*0.5;if(t>=tk-.05&&t<tk+.35){const r=p(t,tk-.05,tk+.35);const cx=100+880-44-46,cy=590+i*230+95;const R=46+eo(r)*60;rp.style.left=(cx-R)+'px';rp.style.top=(cy-R)+'px';rp.style.width=rp.style.height=2*R+'px';rp.style.opacity=1-r;shown=true;}}
+    if(!shown)rp.style.opacity=0;
+  }
+  // S4
+  if(show(3,t)){
+    for(let i=0;i<6;i++){const b=$('b'+i);const t0=11.12+i*0.25;const x=p(t,t0,t0+.18);
+      const sw=t>t0+.18?Math.sin((t-t0-.18)*14)*Math.exp(-(t-t0-.18)*5)*7:0;
+      const dir=b.classList.contains('r')?1:-1;
+      b.style.opacity=cl(x*3);b.style.transform=`translateX(${(1-eo(x))*dir*420}px) rotate(${dir*(sw+(1-eo(x))*-12)}deg)`;
+      out(b,t,14.0,.2);}
+    pop(document.querySelector('#s4 .topcat'),t,11.0,.35,-60);
+    const f=eio(p(t,11.25,13.6));const hp=$('hpath');const L=hp.getTotalLength();
+    hp.style.strokeDasharray=L;hp.style.strokeDashoffset=L*(1-f);hp.style.opacity=t>13.7?1-p(t,13.7,14):.95;
+    const [x,y,a]=pathPos(hp,f);$('plane4').setAttribute('transform',`translate(${x},${y}) rotate(${a}) scale(.9)`);
+    $('pole').style.opacity=1;
+  }
+  // S5
+  if(show(4,t)){
+    if(!window._lay){let y=240;for(const [m,d] of [['m0',null],['m1','d1'],['m2','d2'],['m3','d3']]){$(m).style.top=y+'px';if(d)$(d).style.top=y+'px';y+=$(m).offsetHeight+34;}window._lay=1;}
+    const ph=$('phone');const x=p(t,14.0,14.35);ph.style.opacity=cl(x*2);ph.style.transform=`translateY(${(1-eo(x))*120}px)`;
+    if(t>19.82){ph.style.opacity=1-p(t,19.82,20);}
+    const full='Cho mình hỏi về visa với ạ';
+    const ty=p(t,14.3,14.85);const n=Math.round(full.length*ty);
+    $('intx').innerHTML=t<14.3?'<span class="ph">Nhắn tin...</span>':(t<14.95?full.slice(0,n)+(Math.floor(t*4)%2?'|':''):'<span class="ph">Nhắn tin...</span>');
+    const send=document.querySelector('#inbar .send');const sp=p(t,14.88,15.05);send.style.transform=`scale(${1-Math.sin(sp*Math.PI)*.15})`;
+    const bub=(el,t0)=>{const k=p(t,t0,t0+.3);el.style.opacity=cl(k*3);el.style.transform=`translateY(${(1-eo(k))*30}px) scale(${lerp(.85,1,back(k))})`;el.style.transformOrigin=el.classList.contains('me')?'100% 100%':'0% 100%';};
+    bub($('m0'),14.95);
+    const dots=(el,a,b)=>{const on=t>=a&&t<b;el.style.opacity=on?1:0;el.querySelectorAll('i').forEach((d,i)=>d.style.transform=`translateY(${-Math.max(0,Math.sin((t-a)*10-i*0.9))*12}px)`);};
+    dots($('d1'),15.2,15.55);bub($('m1'),15.55);
+    dots($('d2'),15.8,16.1);bub($('m2'),16.1);
+    dots($('d3'),16.45,16.75);bub($('m3'),16.75);
+  }
+  // S6
+  if(show(5,t)){
+    pop(document.querySelector('#s6 .logo'),t,20.05,.45,60);
+    pop(document.querySelector('#s6 .tag'),t,20.3,.4,50);
+    const cta=document.querySelector('#s6 .cta');const k=p(t,20.6,20.95);cta.style.opacity=cl(k*2);
+    const pulse=t>21.2?1+0.035*Math.sin((t-21.2)*Math.PI*2):1;cta.style.transform=`translateX(-50%) scale(${lerp(.8,1,back(k))*pulse})`;
+    pop(document.querySelector('#s6 .h'),t,20.8,.35,30);pop(document.querySelector('#s6 .h2'),t,20.9,.35,30);
+    for(let i=0;i<3;i++){const h=$('hh'+i);const ph=(t-20.1-i*.35);h.style.top=(1750-ph*260)+'px';h.style.opacity=ph<0?0:cl(1-ph/2.6)*.8;h.style.transform=`rotate(${Math.sin(ph*3+i)*15}deg) scale(${1+i*.3})`;}
+  }
+};
+window.ready=Promise.all([document.fonts.ready,...[...document.images].map(i=>i.decode().catch(()=>{}))]).then(()=>document.fonts.load('80px "Be Vietnam Pro"')).then(()=>document.fonts.load('80px Pacifico'));
+</script>
+</body></html>
