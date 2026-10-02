@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <style>
+      @font-face {
+        font-family: "Inter";
+        src: url("fonts/Inter-400.woff2") format("woff2");
+        font-weight: 400;
+        font-display: block;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("fonts/Inter-700.woff2") format("woff2");
+        font-weight: 700;
+        font-display: block;
+      }
+      :root {
+        --text: #1d1d1f;
+        --muted: #6e6e73;
+        --green: #34c759;
+        --green-dark: #17762f;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+        font-family: "Inter", sans-serif;
+      }
+      #stage {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      #video-wrap {
+        position: absolute;
+        inset: 0;
+      }
+      #video-wrap video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Card hosts live in the chest band: below the face, above the caption third,
+         inside the middle 80% of the width. */
+      .card-host {
+        position: absolute;
+        left: 158px;
+        width: 764px;
+        pointer-events: none;
+      }
+      .glass {
+        width: 100%;
+        border-radius: 32px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1.5px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        padding: 36px 44px 40px;
+        color: var(--text);
+      }
+      .label-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .counts {
+        position: relative;
+        display: inline-block;
+        width: 3.2em;
+        text-align: right;
+      }
+      .cnt {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      #cnt-0 {
+        position: relative;
+        top: 0;
+        transform: none;
+      }
+
+      /* Card 1 — checklist */
+      .items {
+        margin-top: 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+      .item {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        font-size: 44px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .tick {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        flex: none;
+        border-radius: 50%;
+        border: 3px solid rgba(29, 29, 31, 0.18);
+      }
+      .tick-fill {
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        background: var(--green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .tick-fill svg {
+        width: 28px;
+        height: 28px;
+      }
+
+      /* Card 2 — before/after counter */
+      .compare {
+        margin-top: 18px;
+        display: flex;
+        align-items: flex-end;
+        gap: 34px;
+      }
+      .col {
+        flex: 1;
+      }
+      .big {
+        font-size: 120px;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        font-variant-numeric: tabular-nums;
+      }
+      .big.after {
+        color: var(--green-dark);
+      }
+      .arrow {
+        font-size: 64px;
+        font-weight: 700;
+        color: var(--green-dark);
+        padding-bottom: 26px;
+      }
+      .sub {
+        margin-top: 10px;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .bar-track {
+        margin-top: 18px;
+        height: 12px;
+        border-radius: 6px;
+        background: rgba(29, 29, 31, 0.1);
+        overflow: hidden;
+      }
+      .bar {
+        height: 100%;
+        border-radius: 6px;
+        transform-origin: left center;
+      }
+      #bar-before {
+        width: 44%;
+        background: var(--text);
+      }
+      #bar-after {
+        width: 100%;
+        background: var(--green);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="stage"
+      data-composition-id="talking-head-recut"
+      data-start="0"
+      data-duration="18.08"
+      data-fps="24"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div id="video-wrap">
+        <video
+          id="bg-video"
+          src="input-video.mp4"
+          playsinline
+          data-has-audio="true"
+          data-start="0"
+          data-duration="18.08"
+          data-track-index="0"
+        ></video>
+      </div>
+
+      <!-- Card 1: "Three things that doubled my sales" checklist, 3.7s → 13.6s -->
+      <div
+        id="card-checklist"
+        class="card-host clip"
+        data-start="3.7"
+        data-duration="9.9"
+        data-track-index="1"
+        style="top: 900px"
+      >
+        <div class="glass" id="checklist-glass">
+          <div class="label-row">
+            <span>3 things that doubled sales</span>
+            <span class="counts"><span class="cnt" id="cnt-0">0/3</span><span class="cnt" id="cnt-1">1/3</span><span class="cnt" id="cnt-2">2/3</span><span class="cnt" id="cnt-3">3/3</span></span>
+          </div>
+          <div class="items">
+            <div class="item" id="item-1">
+              <div class="tick"><div class="tick-fill" id="tick-1"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+              <span>Better photos</span>
+            </div>
+            <div class="item" id="item-2">
+              <div class="tick"><div class="tick-fill" id="tick-2"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+              <span>Faster replies</span>
+            </div>
+            <div class="item" id="item-3">
+              <div class="tick"><div class="tick-fill" id="tick-3"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+              <span>Real reviews</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: sales per week 40 → 90+, 14.1s → end -->
+      <div
+        id="card-compare"
+        class="card-host clip"
+        data-start="14.1"
+        data-duration="3.98"
+        data-track-index="2"
+        style="top: 930px"
+      >
+        <div class="glass" id="compare-glass">
+          <div class="label-row"><span>Sales per week</span></div>
+          <div class="compare">
+            <div class="col" id="col-before">
+              <div class="big" id="num-before">40</div>
+              <div class="bar-track"><div class="bar" id="bar-before"></div></div>
+              <div class="sub">Before</div>
+            </div>
+            <div class="arrow" id="arrow">→</div>
+            <div class="col" id="col-after">
+              <div class="big after"><span id="num-after">40</span>+</div>
+              <div class="bar-track"><div class="bar" id="bar-after"></div></div>
+              <div class="sub">Now</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="vendor/gsap.min.js"></script>
+      <script>
+        (function () {
+          const tl = gsap.timeline({ paused: true });
+          const q = (t) => Math.round(t * 24) / 24; // snap to frames
+          const enter = { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" };
+          const hidden = { opacity: 0, y: 30, scale: 0.96 };
+
+          // ── Card 1: checklist ──
+          tl.fromTo("#checklist-glass", hidden, enter, q(3.7));
+          const ticks = [
+            { n: 1, at: 4.36 }, // "Better"
+            { n: 2, at: 6.87 }, // "faster"
+            { n: 3, at: 10.3 }, // "real"
+          ];
+          tl.set(".tick-fill", { scale: 0, opacity: 0 }, 0);
+          tl.set(".item span", { opacity: 0.35 }, 0);
+          ticks.forEach(({ n, at }) => {
+            tl.to(`#tick-${n}`, { scale: 1, opacity: 1, duration: 0.35, ease: "power3.out" }, q(at));
+            tl.to(`#item-${n} span`, { opacity: 1, duration: 0.35, ease: "power2.out" }, q(at));
+            tl.set(`#cnt-${n - 1}`, { opacity: 0 }, q(at));
+            tl.set(`#cnt-${n}`, { opacity: 1 }, q(at));
+          });
+          tl.set("#cnt-1, #cnt-2, #cnt-3", { opacity: 0 }, 0);
+          tl.to("#checklist-glass", { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" }, q(13.2));
+
+          // ── Card 2: sales per week ──
+          tl.fromTo("#compare-glass", hidden, enter, q(14.15)); // "Sales"
+          tl.set("#col-before, #arrow, #col-after", { opacity: 0 }, 0);
+          tl.set("#bar-before, #bar-after", { scaleX: 0 }, 0);
+          // "40" lands
+          tl.fromTo("#col-before", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, q(15.2));
+          tl.to("#bar-before", { scaleX: 1, duration: 0.6, ease: "power3.out" }, q(15.25));
+          // "to over" → arrow + after column, counting to 90 on "90"
+          tl.fromTo("#arrow", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, q(16.45));
+          tl.fromTo("#col-after", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, q(16.5));
+          const counter = { v: 40 };
+          const numAfter = document.getElementById("num-after");
+          tl.fromTo(
+            counter,
+            { v: 40 },
+            {
+              v: 90,
+              duration: 0.7,
+              ease: "power2.out",
+              onUpdate: () => {
+                numAfter.textContent = Math.round(counter.v);
+              },
+            },
+            q(16.55)
+          );
+          tl.to("#bar-after", { scaleX: 1, duration: 0.7, ease: "power2.out" }, q(16.55));
+
+          window.__timelines["talking-head-recut"] = tl;
+          tl.seek(0);
+        })();
+      </script>
+    </div>
+  </body>
+</html>
