@@ -500,7 +500,16 @@ AGENTS.forEach((a,i)=>{
 });
 
 // filler houses for a fuller street
-[[-1,42],[1,42],[-1,-22],[1,-22]].forEach(([side,z],k)=>{const h=makeHouse({w:8,d:7,accent:'#c8102e',lanternColor:lanternColors[k%3]});h.position.set(side*11.6,0,z);h.rotation.y=-side*Math.PI/2;town.add(h)});
+// GTTN UK community group: its own hall near the gate
+const GROUP={name:'GTTN UK – Cộng đồng Việt',place:'Hội Quán GTTN',color:'#3fd0b8',scans:0,lastScan:0,
+  base:new THREE.Vector3(6.6,0,43.2),labelPos:new THREE.Vector3(8.5,10.6,42)};
+{const h=makeHouse({w:9,d:7.5,accent:GROUP.color,sign:'HỘI QUÁN GTTN',noren:'Cộng đồng',lanternColor:0x7fe8d0,tall:true});
+ h.position.set(11.6,0,42);h.rotation.y=-Math.PI/2;town.add(h);
+ h.traverse(o=>{if(o.isMesh)o.userData.agent='G'});pickables.push(h);
+ const L=new THREE.PointLight(new THREE.Color(GROUP.color),1.4,14,2);L.position.set(5,5.5,43.5);scene.add(L);
+ const ring=new THREE.Mesh(new THREE.RingGeometry(1.2,1.5,40),B(new THREE.Color(GROUP.color),{transparent:true,opacity:.5,side:THREE.DoubleSide,depthWrite:false,blending:THREE.AdditiveBlending}));
+ ring.rotation.x=-Math.PI/2;ring.position.copy(GROUP.base).add(new THREE.Vector3(0,.05,0));town.add(ring);GROUP.ring=ring}
+[[-1,42],[-1,-22],[1,-22]].forEach(([side,z],k)=>{const h=makeHouse({w:8,d:7,accent:'#c8102e',lanternColor:lanternColors[k%3]});h.position.set(side*11.6,0,z);h.rotation.y=-side*Math.PI/2;town.add(h)});
 // back rows: silhouettes with lit windows
 {const n=70,geo=new THREE.BoxGeometry(1,1,1),mat=M(0x1d1222,{roughness:.9});const im=new THREE.InstancedMesh(geo,mat,n);
  const wgeo=new THREE.PlaneGeometry(1,1),wmat=B(0xffffff,{map:SHOJI});const wm=new THREE.InstancedMesh(wgeo,wmat,n);
@@ -566,6 +575,9 @@ AGENTS.forEach((a,i)=>{
   b.onclick=()=>select(i);chipsEl.appendChild(b);
   const t=document.createElement('div');t.className='tag idle';t.style.setProperty('--c',a.color);t.innerHTML=`<b>${a.name}</b><i>${a.role}</i>`;labelsEl.appendChild(t);chars[i].tag=t;
 });
+{const b=document.createElement('button');b.className='chip';b.type='button';b.style.setProperty('--c',GROUP.color);b.setAttribute('aria-pressed','false');b.title=GROUP.name;b.setAttribute('aria-label',GROUP.name);
+  b.innerHTML='<span class="ini" style="font-size:12px;font-family:var(--f-body);font-weight:800">GTTN</span><span class="busy"></span>';b.onclick=()=>select('G');chipsEl.appendChild(b);GROUP.chip=b;
+  const t=document.createElement('div');t.className='tag idle';t.style.setProperty('--c',GROUP.color);t.innerHTML='<b>Hội Quán GTTN</b><i>Group GTTN UK</i>';labelsEl.appendChild(t);GROUP.tag=t}
 $('#overview').onclick=()=>select(null);
 
 let selected=null;
@@ -573,13 +585,27 @@ const stats={posts:18,replies:142,cycle:18};
 function statusText(i){const c=chars[i];return c.state==='busy'?`Đang làm · ${AGENTS[i].work}`:c.state==='sent'?'Vừa giao việc':'Chờ việc'}
 function esc(s){return s.replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
 function img(i,cls=''){return portraits[i]?`<img src="${portraits[i]}" alt="" class="${cls}">`:`<span class="ph ${cls}"></span>`}
+function groupCard(){
+  const n=pending('post').filter(q=>q.dest==='group').length;
+  cardEl.style.setProperty('--c',GROUP.color);
+  cardEl.innerHTML=`<div class="card-head"><span class="ph" style="display:grid;place-items:center;font:900 15px var(--f-body);color:var(--c)">GTTN</span><div class="badges"><span class="pill no">GROUP</span><span class="pill">Riêng tư</span><span class="pill live">Shinobu quét gov.uk hằng tuần</span></div></div>
+    <h2>${esc(GROUP.name)}</h2><p class="sub">${esc(GROUP.place)} · Luật, cuộc sống, du lịch</p>
+    <div class="kicker">⚡ Bản tin tuần cho group</div>
+    <div class="task"><b>BẢN TIN GOV.UK</b><span>Shinobu quét → Rengoku viết → Giyu soát → bạn duyệt và tự đăng</span></div>
+    <p class="desc">Lịch bài: Thứ Hai luật &amp; giấy tờ · Thứ Tư GTTN đi được đâu · Thứ Sáu chuyện chuyến đi · Chủ Nhật sống ở Anh. Agent chỉ soạn nháp, không tự đăng vào group.</p>
+    <div class="meta"><div><span>Lần quét gần nhất</span><b class="now ${GROUP.lastScan?'on':''}" id="g-last">${GROUP.lastScan?ago(GROUP.lastScan):'Chưa quét'}</b></div><div><span>Bài group chờ duyệt</span><b class="now" id="g-wait">${n} bài</b></div></div>
+    <button class="btn" type="button" id="openq" style="border-color:var(--c)">Mở bài chờ duyệt</button>
+    <div class="nav"><button class="btn" type="button" id="all">Toàn cảnh</button></div>`;
+  $('#openq').onclick=()=>openQueue(true,'post');$('#all').onclick=()=>select(null);
+}
 function renderCard(){
+  if(selected==='G'){groupCard();return}
   if(selected===null){
     cardEl.style.setProperty('--c','#f2c14e');
     cardEl.innerHTML=`<div><div class="kicker">Đội quân nội dung Fanpage</div><h2 style="margin-top:6px">7 Agent · 1 Con Phố</h2></div>
       <div class="stats"><div><b id="s-posts">${stats.posts}</b><span>BÀI ĐÃ SOẠN</span></div><div><b id="s-rep">${stats.replies}</b><span>CMT ĐÃ BÁO</span></div><div><b>24/7</b><span>TỰ CHẠY</span></div></div>
-      <ul class="roster">${AGENTS.map((a,i)=>`<li><button type="button" data-i="${i}" style="--c:${a.color}">${img(i)}<span class="who"><b>${esc(a.name)}</b><small>${esc(a.role)} · ${esc(a.place)}</small></span><span class="st ${chars[i].state==='busy'?'on':''}" data-st="${i}">${chars[i].state==='busy'?'● Đang làm':'Chờ'}</span></button></li>`).join('')}</ul>`;
-    cardEl.querySelectorAll('.roster button').forEach(b=>b.onclick=()=>select(+b.dataset.i));
+      <ul class="roster">${AGENTS.map((a,i)=>`<li><button type="button" data-i="${i}" style="--c:${a.color}">${img(i)}<span class="who"><b>${esc(a.name)}</b><small>${esc(a.role)} · ${esc(a.place)}</small></span><span class="st ${chars[i].state==='busy'?'on':''}" data-st="${i}">${chars[i].state==='busy'?'● Đang làm':'Chờ'}</span></button></li>`).join('')}<li><button type="button" data-i="G" style="--c:${GROUP.color}"><span class="ph" style="display:grid;place-items:center;font:900 11px var(--f-body);color:${GROUP.color}">GTTN</span><span class="who"><b>${esc(GROUP.name)}</b><small>Group · ${esc(GROUP.place)}</small></span><span class="st">Group</span></button></li></ul>`;
+    cardEl.querySelectorAll('.roster button').forEach(b=>b.onclick=()=>select(b.dataset.i==='G'?'G':+b.dataset.i));
   }else{
     const a=AGENTS[selected];cardEl.style.setProperty('--c',a.color);
     cardEl.innerHTML=`<div class="card-head">${img(selected)}<div class="badges"><span class="pill no">${selected===0?'TỔNG CHỈ HUY':'AGENT #'+selected}</span><span class="pill live">Đang tự chạy</span><span class="pill">✦ Claude Opus 5.5</span></div></div>
@@ -601,6 +627,7 @@ function refreshStatus(){
     chipsEl.children[i].classList.toggle('working',c.state==='busy')});
   if(selected===null){chars.forEach((c,i)=>{const s=cardEl.querySelector(`[data-st="${i}"]`);if(s){s.textContent=c.state==='busy'?'● Đang làm':'Chờ';s.classList.toggle('on',c.state==='busy')}});
     const p=$('#s-posts'),r=$('#s-rep');if(p)p.textContent=stats.posts;if(r)r.textContent=stats.replies}
+  else if(selected==='G'){const l=$('#g-last'),w=$('#g-wait');if(l){l.textContent=GROUP.lastScan?ago(GROUP.lastScan):'Chưa quét';l.classList.toggle('on',!!GROUP.lastScan)}if(w)w.textContent=pending('post').filter(q=>q.dest==='group').length+' bài'}
   else{const n=$('#now');if(n){n.textContent=statusText(selected);n.classList.toggle('on',chars[selected].state==='busy')}
     const code=cardEl.querySelector('.meta code');if(code)code.textContent=AGENTS[selected].file(stats.cycle)}
 }
@@ -632,7 +659,12 @@ const POSTS=[
  {title:'Phỏng vấn visa Mỹ: 7 câu hỏi hay gặp',body:'Lãnh sự hỏi gì trong 2–3 phút phỏng vấn? Hai Pals tổng hợp 7 câu hỏi và cách trả lời rõ ràng, trung thực…',tags:'#visamy #phongvanvisa',time:'20:00 ngày mai'},
  {title:'Chứng minh tài chính visa Hàn: những điều cần biết',body:'Sổ tiết kiệm, sao kê, tài sản… loại nào được chấp nhận và cần chuẩn bị trước bao lâu?…',tags:'#visahan #chungminhtaichinh',time:'20:00 thứ Bảy'}
 ];
-let poolIdx=0,postIdx=0,qid=0,qTab='cmt',qOpen=false;const QUEUE=[];
+const GPOSTS=[
+ {title:'Bản tin luật tuần: quy chế tị nạn thay đổi từ 2/3/2026',body:'Diện mới được cấp khoảng 30 tháng rồi xét lại, chờ định cư cơ bản 20 năm, diện đoàn tụ gia đình tạm ngừng. Ai đã có quy chế trước 2/3/2026 nên hỏi luật sư hoặc cố vấn có đăng ký về trường hợp riêng.',tags:'Nguồn: UK Parliament 2/3/2026, Migration Observatory',time:'Thứ Hai 20:00'},
+ {title:'GTTN đi được đâu? Vì sao mỗi nguồn nói một kiểu',body:'Mỗi nước tự quy định với giấy thông hành do Anh cấp, nhiều trang tổng hợp không cập nhật. Cách kiểm tra: trang Đại sứ quán nước đến, mục refugee travel document issued by the UK, và hỏi hãng bay trước khi mua vé.',tags:'Nguồn: gov.uk, trang Đại sứ quán',time:'Thứ Tư 21:00'},
+ {title:'eVisa và share code: người có GTTN cần biết gì?',body:'Thẻ BRP đã được thay bằng eVisa. Dùng share code để chứng minh quyền đi làm, thuê nhà. Kiểm tra tài khoản UKVI, cập nhật giấy tờ đi lại, không đưa mật khẩu cho người khác.',tags:'Nguồn: gov.uk eVisa',time:'Chủ Nhật 20:00'}
+];
+let gpostIdx=0,poolIdx=0,postIdx=0,qid=0,qTab='cmt',qOpen=false;const QUEUE=[];
 function checkDraft(t){const low=(t||'').toLowerCase();return BANNED.filter(w=>low.includes(w))}
 function pending(kind){return QUEUE.filter(q=>!q.status&&(!kind||q.kind===kind))}
 function openqText(){return selected===5?`Mở bài chờ duyệt · ${pending('post').length} bài`:`Mở bình luận mới · ${pending('cmt').length} việc`}
@@ -640,8 +672,9 @@ function addComment(ago=0){
   const q=Object.assign({kind:'cmt',id:++qid,at:Date.now()-ago*60000},POOL[poolIdx++%POOL.length]);
   QUEUE.unshift(q);if(QUEUE.length>50)QUEUE.pop();stats.replies++;return q;
 }
-function addPost(ago=0,n=stats.cycle){
-  const q=Object.assign({kind:'post',id:++qid,at:Date.now()-ago*60000,n},POSTS[postIdx++%POSTS.length]);
+function addPost(ago=0,n=stats.cycle,dest='page'){
+  const src=dest==='group'?GPOSTS[gpostIdx++%GPOSTS.length]:POSTS[postIdx++%POSTS.length];
+  const q=Object.assign({kind:'post',dest,id:++qid,at:Date.now()-ago*60000,n},src);
   QUEUE.unshift(q);if(QUEUE.length>50)QUEUE.pop();return q;
 }
 function logLine(i,html){const t=new Date(),hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
@@ -666,12 +699,13 @@ function cmtHTML(q){
 }
 function postHTML(q){
   const acts=q.status?'':`<div class="acts"><button class="go" data-act="copy">Sao chép nội dung</button><button data-act="published">Đã đăng</button><button class="no" data-act="returned">Trả lại sửa</button></div>`;
-  return `<header><span class="risk">Bài chờ duyệt</span><span class="who">Tanjiro · ${ago(q.at)}</span></header>
+  const g=q.dest==='group';
+  return `<header><span class="risk">${g?'Group GTTN UK':'Fanpage'} · chờ duyệt</span><span class="who">${g?'Shinobu · gov.uk':'Tanjiro'} · ${ago(q.at)}</span></header>
     <p class="post-title">${esc(q.title)}</p><div class="draft"><p>${esc(q.body)}</p><p>${esc(q.tags)}</p></div>
-    <div class="post-meta"><span>fb-post-MIN0${q.n}.md</span><span>visual-MIN0${q.n}.png · 9:16</span><span>Gợi ý đăng: ${esc(q.time)}</span></div>
+    <div class="post-meta">${g?`<span>Đăng vào: Group GTTN UK</span>`:`<span>fb-post-MIN0${q.n}.md</span><span>Ảnh 4:5 + 9:16</span>`}<span>Gợi ý đăng: ${esc(q.time)}</span></div>
     <div class="check ok">Giyu đã soát: đúng chính tả, không có câu cấm.</div>${acts}`;
 }
-function itemHTML(q){const st=DONE[q.status];const c=q.kind==='post'?'#9b7bff':RISK[q.risk].c;
+function itemHTML(q){const st=DONE[q.status];const c=q.kind==='post'?(q.dest==='group'?GROUP.color:'#9b7bff'):RISK[q.risk].c;
   return `<article class="q-item" style="--r:${c}" data-id="${q.id}">${q.kind==='post'?postHTML(q):cmtHTML(q)}${st?`<div class="done-st ${st[0]}">${st[1]}</div>`:''}</article>`}
 function renderQueue(){
   const pc=pending('cmt'),pp=pending('post'),done=QUEUE.filter(q=>q.status);
@@ -705,16 +739,17 @@ $('#qlist').addEventListener('click',e=>{
   if(act==='edit'){const t=$('#edit-'+id);if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length)}}
 });
 [2,5,9,14,21,30].forEach(m=>addComment(m));stats.replies-=6;
-addPost(40,stats.cycle-1);addPost(12,stats.cycle);
+addPost(40,stats.cycle-1);addPost(12,stats.cycle);addPost(90,0,'group');
 setInterval(()=>{if(qOpen)renderQueue()},60000);
 
 /* camera moves */
 let tween=null;
 function flyTo(pos,target,dur=1.5){tween={p0:camera.position.clone(),t0:controls.target.clone(),p1:pos.clone(),t1:target.clone(),s:performance.now(),d:reduce?1:dur*1000}}
 function select(i){
-  selected=i;[...chipsEl.children].forEach((b,k)=>b.setAttribute('aria-pressed',String(k===i)));
+  selected=i;[...chipsEl.children].forEach((b,k)=>b.setAttribute('aria-pressed',String(i==='G'?k===AGENTS.length:k===i)));
   renderCard();
   if(i===null){flyTo(HOME.pos,HOME.target,1.8);return}
+  if(i==='G'){flyTo(new THREE.Vector3(narrow?-14:-9,narrow?9:7.5,narrow?22:27),new THREE.Vector3(10,narrow?3:5,42),1.4);return}
   const c=chars[i],p=c.base;
   const out=i===0?new THREE.Vector3(0,0,1):new THREE.Vector3(-Math.sign(p.x),0,0);
   const side=new THREE.Vector3(0,0,1);
@@ -732,7 +767,7 @@ function pick(e){const r=canvas.getBoundingClientRect();ptr.set(((e.clientX-r.le
 canvas.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};tween=null;hideHint()});
 canvas.addEventListener('pointerup',e=>{if(!down)return;const moved=Math.hypot(e.clientX-down.x,e.clientY-down.y);down=null;if(moved<6){const a=pick(e);if(a!==undefined)select(a)}});
 if(matchMedia('(hover:hover)').matches){let last=0;canvas.addEventListener('pointermove',e=>{const n=performance.now();if(n-last<80||down)return;last=n;canvas.style.cursor=pick(e)!==undefined?'pointer':'grab'})}
-canvas.addEventListener('keydown',e=>{if(e.key==='ArrowRight')select(selected===null?0:(selected+1)%7);if(e.key==='ArrowLeft')select(selected===null?6:(selected+6)%7);if(e.key==='Escape')select(null)});
+canvas.addEventListener('keydown',e=>{if(typeof selected!=='number'&&e.key!=='Escape'){select(e.key==='ArrowRight'?0:e.key==='ArrowLeft'?6:selected);return}if(e.key==='ArrowRight')select(selected===null?0:(selected+1)%7);if(e.key==='ArrowLeft')select(selected===null?6:(selected+6)%7);if(e.key==='Escape')select(null)});
 let hintHidden=false;function hideHint(){if(hintHidden)return;hintHidden=true;$('#hint').style.opacity=0}
 setTimeout(hideHint,9000);
 
@@ -776,11 +811,21 @@ function updatePipeline(dt){
   }
 }
 
+/* ---------- weekly gov.uk scan: Shinobu → Hội Quán GTTN ---------- */
+const scanTok=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:new THREE.Color(GROUP.color),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));scanTok.scale.set(2.4,2.4,1);scanTok.visible=false;scene.add(scanTok);
+const scanCurve=new THREE.QuadraticBezierCurve3(new THREE.Vector3(),new THREE.Vector3(),new THREE.Vector3());let scanT=-1;
+function startScan(){if(scanT>=0)return;const a=chars[1].base.clone().add(new THREE.Vector3(0,3,0)),b=GROUP.labelPos.clone().add(new THREE.Vector3(0,-4,0));
+  scanCurve.v0.copy(a);scanCurve.v2.copy(b);scanCurve.v1.copy(a).lerp(b,.5).add(new THREE.Vector3(0,9,0));scanT=0;scanTok.visible=true;
+  logLine(1,`quét gov.uk → bản tin tuần cho <code>Group GTTN UK</code>`)}
+function updateScan(dt){if(scanT<0)return;scanT+=dt/3.2;const k=Math.min(1,scanT);scanTok.position.copy(scanCurve.getPoint(k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2));
+  if(k>=1){scanT=-1;scanTok.visible=false;GROUP.scans++;GROUP.lastScan=Date.now();addPost(0,0,'group');renderQueue();if(selected==='G')groupCard()}}
+setTimeout(startScan,12000);setInterval(startScan,55000);
+
 /* ---------- loop ---------- */
 const clock=new THREE.Clock();const tmp=new THREE.Vector3();
 function frame(){
   const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
-  updatePipeline(dt);
+  updatePipeline(dt);updateScan(dt);
   if(tween){const k=Math.min(1,(performance.now()-tween.s)/tween.d),e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;camera.position.lerpVectors(tween.p0,tween.p1,e);controls.target.lerpVectors(tween.t0,tween.t1,e);if(k>=1)tween=null}
   controls.update();
   chars.forEach((c,i)=>{const body=c.obj.userData.body;
@@ -793,6 +838,9 @@ function frame(){
     if(vis){c.tag.style.transform=`translate(${(tmp.x*.5+.5)*innerWidth}px,${(-tmp.y*.5+.5)*innerHeight}px) translate(-50%,-100%)`;c.tag.style.opacity=selected===null||selected===i?1:.35;c.tag.hidden=false}else c.tag.hidden=true;
   });
   if(EN){const p=eGeo.attributes.position.array;for(let i=0;i<EN;i++){p[i*3]+=(eVel[i*3]+Math.sin(t+i)*.3)*dt;p[i*3+1]+=eVel[i*3+1]*dt;p[i*3+2]+=eVel[i*3+2]*dt;if(p[i*3+1]>26){p[i*3+1]=0;p[i*3]=(Math.random()-.5)*60;p[i*3+2]=(Math.random()-.5)*110}}eGeo.attributes.position.needsUpdate=true}
+  if(GROUP.tag){tmp.copy(GROUP.labelPos).project(camera);const gv=tmp.z<1&&Math.abs(tmp.x)<1.2&&Math.abs(tmp.y)<1.2;
+    if(gv){GROUP.tag.style.transform=`translate(${(tmp.x*.5+.5)*innerWidth}px,${(-tmp.y*.5+.5)*innerHeight}px) translate(-50%,-100%)`;GROUP.tag.style.opacity=selected===null||selected==='G'?1:.35;GROUP.tag.hidden=false}else GROUP.tag.hidden=true;
+    GROUP.tag.className='tag '+(scanT>=0?'busy':'idle');GROUP.chip.classList.toggle('working',scanT>=0);GROUP.ring.material.opacity=scanT>=0?.95:.45}
   composer.render();
   requestAnimationFrame(frame);
 }
