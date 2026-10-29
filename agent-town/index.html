@@ -123,6 +123,11 @@ body{background:var(--night);color:var(--ink);font-family:var(--f-body);-webkit-
 .tabs{display:flex;gap:6px}
 .tabs button{flex:1;font:700 12.5px var(--f-body);color:var(--muted);background:none;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:7px;cursor:pointer}
 .tabs button[aria-selected="true"]{color:#140b16;background:var(--gold);border-color:var(--gold)}
+.q-note{margin:0;font-size:12.5px;line-height:1.45;color:var(--muted)}
+.toast{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);background:#3ddc97;color:#0c1a12;font:700 12.5px var(--f-body);padding:8px 14px;border-radius:999px;white-space:nowrap}
+.post-meta{display:flex;flex-wrap:wrap;gap:6px}
+.post-meta span{font:500 11px var(--f-mono);padding:4px 7px;border:1px solid rgba(255,255,255,.16);border-radius:6px;color:var(--muted)}
+.post-title{margin:0;font:800 14.5px/1.35 var(--f-body)}
 .q-list{flex:1;overflow:auto;padding:12px 16px 16px;display:flex;flex-direction:column;gap:10px}
 .q-empty{color:var(--muted);font-size:13px;text-align:center;padding:24px 8px;line-height:1.5}
 .q-item{border:1px solid rgba(255,255,255,.1);border-left:4px solid var(--r);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;background:rgba(255,255,255,.03)}
@@ -173,23 +178,25 @@ body{background:var(--night);color:var(--ink);font-family:var(--f-body);-webkit-
 <header class="top">
   <div class="brand"><strong>Phố Đèn Lồng</strong><span>Đội Diệt Quỷ AI · Hai Pals</span></div>
   <nav class="chips" id="chips" aria-label="Chọn agent"></nav>
-  <button class="btn qbtn" id="qbtn" type="button" aria-controls="queue" aria-expanded="false"><span class="lbl">Hàng chờ duyệt</span><span class="lbl-s" aria-hidden="true">Duyệt</span><span class="n" id="qn">0</span></button>
+  <button class="btn qbtn" id="qbtn" type="button" aria-controls="queue" aria-expanded="false"><span class="lbl">Hộp việc của bạn</span><span class="lbl-s" aria-hidden="true">Hộp việc</span><span class="n" id="qn">0</span></button>
   <button class="btn" id="overview" type="button">Toàn cảnh</button>
 </header>
 
 <section class="card" id="card" aria-live="polite"></section>
-<section class="queue" id="queue" hidden aria-label="Hàng chờ duyệt bình luận">
+<section class="queue" id="queue" hidden aria-label="Hộp việc của bạn">
   <div class="q-head">
-    <div class="q-title"><h3>Hàng chờ duyệt</h3><button class="x" id="qclose" type="button" aria-label="Đóng hàng chờ">✕</button></div>
-    <div class="policy">
-      <div style="--r:#3ddc97"><b>Xanh · An toàn</b>Mẫu đã duyệt, Zenitsu tự đăng</div>
-      <div style="--r:#f2c14e"><b>Vàng · Cần chính xác</b>Phí, thời gian, giấy tờ: chờ bạn duyệt</div>
-      <div style="--r:#ff4b4b"><b>Đỏ · Nhạy cảm</b>Không trả lời, báo bạn ngay</div>
+    <div class="q-title"><h3>Hộp việc của bạn</h3><button class="x" id="qclose" type="button" aria-label="Đóng hộp việc">✕</button></div>
+    <p class="q-note">Agent chỉ báo và gợi ý. Bạn tự trả lời bình luận và tự đăng bài, không có gì được đăng lên Fanpage tự động.</p>
+    <div class="tabs" role="tablist"><button type="button" role="tab" id="tab-cmt" aria-selected="true">Bình luận (<span id="tc">0</span>)</button><button type="button" role="tab" id="tab-post" aria-selected="false">Bài chờ duyệt (<span id="tp">0</span>)</button><button type="button" role="tab" id="tab-done" aria-selected="false">Đã xong (<span id="td">0</span>)</button></div>
+    <div class="policy" id="policy">
+      <div style="--r:#3ddc97"><b>Xanh · Đơn giản</b>Có câu mẫu, trả lời nhanh</div>
+      <div style="--r:#f2c14e"><b>Vàng · Cần chính xác</b>Phí, thời gian, giấy tờ: kiểm tra trước khi trả lời</div>
+      <div style="--r:#ff4b4b"><b>Đỏ · Nhạy cảm</b>Nên inbox hoặc gọi riêng</div>
     </div>
-    <div class="tabs" role="tablist"><button type="button" role="tab" id="tab-wait" aria-selected="true">Chờ xử lý (<span id="tw">0</span>)</button><button type="button" role="tab" id="tab-done" aria-selected="false">Đã xử lý (<span id="td">0</span>)</button></div>
-    <div class="sample">BÌNH LUẬN MẪU ĐỂ MINH HỌA · CHƯA NỐI FANPAGE THẬT</div>
+    <div class="sample">DỮ LIỆU MẪU ĐỂ MINH HỌA · CHƯA NỐI FANPAGE THẬT</div>
   </div>
   <div class="q-list" id="qlist"></div>
+  <div class="toast" id="toast" role="status" hidden></div>
 </section>
 <aside class="log" aria-label="Nhật ký đội quân"><div class="kicker">Nhật ký đội quân · trực tiếp</div><ol id="log"></ol></aside>
 <div class="hint" id="hint">Kéo để xoay · cuộn/chụm để zoom · chạm vào agent để xem</div>
@@ -238,18 +245,18 @@ const AGENTS=[
   look:{skin:0xf2c9a8,hair:0x4a4f5c,style:'mane',top:0xf2c9a8,pants:0x6a7488,belt:0x7a5634,fur:true,boar:true,sword:2,swordCols:[0x8a93a3,0x8a93a3]}},
  {key:'giyu',name:'Tomioka Giyu',role:'Kiểm duyệt',power:'Thủy Hô Hấp',place:'Kiếm Đạo Đường',color:'#3ddc97',
   task:'KIỂM DUYỆT',taskSub:'Soát lỗi & thông tin visa',
-  desc:'Đọc bài, ảnh và nháp trả lời của Zenitsu → kiểm tra chính tả, phí và giấy tờ visa cho đúng, chặn mọi câu hứa “bao đậu” → duyệt hoặc trả lại.',
+  desc:'Đọc bài, ảnh và gợi ý trả lời của Zenitsu → kiểm tra chính tả, phí và giấy tờ visa cho đúng, chặn mọi câu hứa “bao đậu” → duyệt hoặc trả lại.',
   file:n=>`review-MIN0${n}.md`,work:'Soát bài & ảnh',
   look:{skin:0xf3d3b8,hair:0x14141e,style:'long',top:0x1b1b26,pants:0x1b1b26,belt:0xf2f2f2,cloak:0xffffff,pattern:['split','#8e1b2b','#3f8a5a'],eyes:[0x2a5fb3,0x2a5fb3],sword:1,swordCols:[0x3a7fd8]}},
- {key:'tanjiro',name:'Kamado Tanjiro',role:'Hẹn giờ đăng',power:'Nhật Hô Hấp',place:'Nhật Luân Đài',color:'#9b7bff',
-  task:'ĐĂNG & LÊN LỊCH',taskSub:'Đăng bài & hẹn giờ tự động',
-  desc:'Nhận bài đã duyệt → tự động xếp lịch đăng lên Fanpage Facebook đúng khung giờ vàng 20:00.',
-  file:n=>`schedule-MIN0${n}.json`,work:'Xếp lịch đăng 20:00',
+ {key:'tanjiro',name:'Kamado Tanjiro',role:'Gửi bài duyệt',power:'Nhật Hô Hấp',place:'Nhật Luân Đài',color:'#9b7bff',
+  task:'GỬI BÀI CHỜ DUYỆT',taskSub:'Đóng gói bài & gợi ý giờ đăng',
+  desc:'Nhận bài đã qua Giyu → đóng gói nội dung, ảnh 9:16, hashtag và gợi ý khung giờ vàng → gửi vào hộp “Bài chờ duyệt” để bạn duyệt và tự đăng.',
+  file:n=>`ready-MIN0${n}.md`,work:'Đóng gói bài chờ duyệt',
   look:{skin:0xf6d6bc,hair:0x4a1416,tip:0x8a2a1e,style:'messy',top:0x1b1b26,pants:0x1b1b26,belt:0xf2f2f2,cloak:0xffffff,pattern:['check','#1b1b1b','#1f8a5a'],eyes:[0x9e2a2a,0x9e2a2a],scarForehead:true,earrings:true,sword:1,swordCols:[0x111116],spark:0x4ab8ff}},
- {key:'zenitsu',name:'Agatsuma Zenitsu',role:'Trả lời cmt',power:'Lôi Hô Hấp',place:'Lôi Minh Tháp',color:'#ff4b4b',
-  task:'TRẢ LỜI CMT',taskSub:'Phản hồi & trả lời bình luận',
-  desc:'Trực Fanpage 24/7 → tự trả lời câu an toàn bằng mẫu đã duyệt; câu về phí, thời gian, giấy tờ chỉ soạn nháp vào Hàng chờ duyệt; câu nhạy cảm báo ngay cho chủ doanh nghiệp.',
-  file:()=>'audience-questions.json',work:'Trả lời bình luận',
+ {key:'zenitsu',name:'Agatsuma Zenitsu',role:'Báo comment',power:'Lôi Hô Hấp',place:'Lôi Minh Tháp',color:'#ff4b4b',
+  task:'BÁO CMT & GỢI Ý',taskSub:'Báo bình luận mới & gợi ý cách trả lời',
+  desc:'Trực Fanpage 24/7 → báo ngay khi có bình luận mới, phân loại mức rủi ro và gợi ý câu trả lời để bạn tự trả lời. Zenitsu không tự đăng gì lên Fanpage.',
+  file:()=>'comment-alerts.json',work:'Đọc bình luận mới',
   look:{skin:0xfbdcc0,hair:0xffd23a,tip:0xff8a1c,style:'messy',top:0x1b1b26,pants:0x1b1b26,belt:0xf2f2f2,cloak:0xffffff,pattern:['tri','#ffb52e','#fff6dc'],eyes:[0x8a5a1a,0x8a5a1a],sword:1,swordCols:[0xffe27a],spark:0xffe23a}}
 ];
 
@@ -570,7 +577,7 @@ function renderCard(){
   if(selected===null){
     cardEl.style.setProperty('--c','#f2c14e');
     cardEl.innerHTML=`<div><div class="kicker">Đội quân nội dung Fanpage</div><h2 style="margin-top:6px">7 Agent · 1 Con Phố</h2></div>
-      <div class="stats"><div><b id="s-posts">${stats.posts}</b><span>BÀI ĐÃ ĐĂNG</span></div><div><b id="s-rep">${stats.replies}</b><span>CMT ĐÃ TRẢ LỜI</span></div><div><b>24/7</b><span>TỰ CHẠY</span></div></div>
+      <div class="stats"><div><b id="s-posts">${stats.posts}</b><span>BÀI ĐÃ SOẠN</span></div><div><b id="s-rep">${stats.replies}</b><span>CMT ĐÃ BÁO</span></div><div><b>24/7</b><span>TỰ CHẠY</span></div></div>
       <ul class="roster">${AGENTS.map((a,i)=>`<li><button type="button" data-i="${i}" style="--c:${a.color}">${img(i)}<span class="who"><b>${esc(a.name)}</b><small>${esc(a.role)} · ${esc(a.place)}</small></span><span class="st ${chars[i].state==='busy'?'on':''}" data-st="${i}">${chars[i].state==='busy'?'● Đang làm':'Chờ'}</span></button></li>`).join('')}</ul>`;
     cardEl.querySelectorAll('.roster button').forEach(b=>b.onclick=()=>select(+b.dataset.i));
   }else{
@@ -581,12 +588,12 @@ function renderCard(){
       <div class="task"><b>${esc(a.task)}</b><span>${esc(a.taskSub)}</span></div>
       <p class="desc">${esc(a.desc)}</p>
       <div class="meta"><div><span>File đầu ra</span><code>${esc(a.file(stats.cycle))}</code></div><div><span>Hiện tại</span><b class="now ${chars[selected].state==='busy'?'on':''}" id="now">${esc(statusText(selected))}</b></div></div>
-      ${selected===6?`<button class="btn" type="button" id="openq" style="border-color:var(--c)">Mở hàng chờ duyệt · ${pending().length} việc</button>`:''}
+      ${selected===6||selected===5?`<button class="btn" type="button" id="openq" style="border-color:var(--c)">${openqText()}</button>`:''}
       <div class="nav"><button class="btn" type="button" id="prev" aria-label="Agent trước">‹ Trước</button><button class="btn" type="button" id="all">Toàn cảnh</button><button class="btn" type="button" id="next" aria-label="Agent sau">Sau ›</button></div>`;
     $('#prev').onclick=()=>select((selected+AGENTS.length-1)%AGENTS.length);
     $('#next').onclick=()=>select((selected+1)%AGENTS.length);
     $('#all').onclick=()=>select(null);
-    const oq=$('#openq');if(oq)oq.onclick=()=>openQueue(true);
+    const oq=$('#openq');if(oq)oq.onclick=()=>openQueue(true,selected===5?'post':'cmt');
   }
 }
 function refreshStatus(){
@@ -604,88 +611,101 @@ function log(from,to,file){
   logEl.prepend(li);while(logEl.children.length>6)logEl.lastChild.remove();
 }
 
-/* ---------- approval queue ---------- */
+/* ---------- your inbox: comment alerts + posts awaiting approval ---------- */
 const BANNED=['bao đậu','100%','chắc chắn đậu','chắc chắn có visa','cam kết đậu','sổ ảo','sổ tiết kiệm ảo','đảm bảo đậu'];
-const RISK={green:{c:'#3ddc97',t:'Xanh · An toàn'},yellow:{c:'#f2c14e',t:'Vàng · Cần chính xác'},red:{c:'#ff4b4b',t:'Đỏ · Nhạy cảm'}};
+const RISK={green:{c:'#3ddc97',t:'Xanh · Đơn giản'},yellow:{c:'#f2c14e',t:'Vàng · Cần chính xác'},red:{c:'#ff4b4b',t:'Đỏ · Nhạy cảm'}};
 const POOL=[
- {risk:'green',who:'Ngọc Hân',cmt:'Tư vấn visa Hàn cho em với ạ',draft:'Dạ Hai Pals cảm ơn chị đã quan tâm! Em đã inbox chị để tư vấn chi tiết hồ sơ visa Hàn nhé ạ.'},
- {risk:'yellow',who:'Minh Anh',cmt:'Phí làm visa Nhật bao nhiêu vậy ạ?',draft:'Dạ phí dịch vụ visa Nhật bên em tùy theo diện hồ sơ (du lịch, thăm thân, công tác). Em đã inbox bảng phí chi tiết cho anh/chị ạ.',note:'Khớp bảng phí · không nêu con số công khai'},
- {risk:'red',who:'Hoàng Long',cmt:'Làm bên này trượt visa Mỹ mà không được hoàn tiền, lừa đảo!',reason:'Khiếu nại công khai · đã báo chủ doanh nghiệp'},
- {risk:'yellow',who:'Thảo Vy',cmt:'Hồ sơ em làm freelancer thì có đậu visa Úc không ạ?',draft:'Dạ chị yên tâm, bên em bao đậu 100% visa Úc cho freelancer ạ!'},
- {risk:'green',who:'Quốc Bảo',cmt:'Văn phòng mình làm việc giờ nào vậy shop?',draft:'Dạ Hai Pals làm việc 8:30–17:30 từ thứ 2 đến thứ 7. Em gửi địa chỉ chi tiết qua inbox cho anh ạ.'},
- {risk:'yellow',who:'Thu Trang',cmt:'Visa Schengen xét bao lâu thì có kết quả ạ?',draft:'Dạ thời gian xét duyệt do Đại sứ quán quyết định, thường khoảng 15 ngày làm việc. Chị inbox để em kiểm tra lịch hẹn hiện tại nhé ạ.',note:'Có nêu mốc thời gian · cần bạn xác nhận còn đúng'},
- {risk:'red',who:'Tuấn Kiệt',cmt:'Có cách nào làm sổ tiết kiệm ảo để chứng minh tài chính không ad?',reason:'Hỏi cách làm hồ sơ sai luật · không trả lời công khai'},
- {risk:'green',who:'Lan Phương',cmt:'Bài hữu ích quá, cảm ơn page!',draft:'Dạ cảm ơn chị đã theo dõi Hai Pals ạ! Chị cần hỗ trợ hồ sơ visa nào cứ inbox em nhé.'},
- {risk:'yellow',who:'Đức Huy',cmt:'Đi Mỹ cần chứng minh tài chính bao nhiêu tiền vậy?',draft:'Dạ visa Mỹ không có con số cố định, Lãnh sự xem tổng thể công việc, tài chính và mục đích chuyến đi. Anh inbox để tư vấn viên xem hồ sơ cụ thể giúp anh ạ.',note:'Khớp FAQ visa Mỹ'},
- {risk:'yellow',who:'Bích Ngọc',cmt:'Visa Hàn 5 năm cần giấy tờ gì vậy ạ?',draft:'Dạ visa Hàn 5 năm chắc chắn đậu nếu chị có sổ tiết kiệm. Em inbox danh sách giấy tờ cho chị nhé!'}
+ {risk:'green',who:'Ngọc Hân',cmt:'Tư vấn visa Hàn cho em với ạ',draft:'Dạ Hai Pals cảm ơn chị đã quan tâm! Em inbox chị để tư vấn chi tiết hồ sơ visa Hàn nhé ạ.',tip:'Nhắn tin riêng cho khách sau khi trả lời.'},
+ {risk:'yellow',who:'Minh Anh',cmt:'Phí làm visa Nhật bao nhiêu vậy ạ?',draft:'Dạ phí dịch vụ visa Nhật bên em tùy theo diện hồ sơ (du lịch, thăm thân, công tác). Em inbox bảng phí chi tiết cho anh/chị ạ.',tip:'Không nêu con số công khai, gửi bảng phí mới nhất qua inbox.'},
+ {risk:'red',who:'Hoàng Long',cmt:'Làm bên này trượt visa Mỹ mà không được hoàn tiền, lừa đảo!',draft:'Dạ Hai Pals rất tiếc về trải nghiệm của anh. Em đã inbox để kiểm tra lại hồ sơ và hỗ trợ anh ngay ạ.',tip:'Đừng tranh luận công khai. Trả lời ngắn rồi gọi điện cho khách trong ngày, đối chiếu hợp đồng về điều khoản hoàn phí.'},
+ {risk:'yellow',who:'Thảo Vy',cmt:'Hồ sơ em làm freelancer thì có đậu visa Úc không ạ?',draft:'Dạ chị yên tâm, bên em bao đậu 100% visa Úc cho freelancer ạ!',tip:'Khả năng đậu do Bộ Di trú quyết định, chỉ nên mời khách gửi hồ sơ để đánh giá.'},
+ {risk:'green',who:'Quốc Bảo',cmt:'Văn phòng mình làm việc giờ nào vậy shop?',draft:'Dạ Hai Pals làm việc 8:30–17:30 từ thứ 2 đến thứ 7. Em gửi địa chỉ chi tiết qua inbox cho anh ạ.',tip:'Kiểm tra lại giờ làm việc nếu có ngày nghỉ lễ.'},
+ {risk:'yellow',who:'Thu Trang',cmt:'Visa Schengen xét bao lâu thì có kết quả ạ?',draft:'Dạ thời gian xét duyệt do Đại sứ quán quyết định, thường khoảng 15 ngày làm việc. Chị inbox để em kiểm tra lịch hẹn hiện tại nhé ạ.',tip:'Kiểm tra mốc thời gian hiện tại của nước chị ấy định nộp trước khi trả lời.'},
+ {risk:'red',who:'Tuấn Kiệt',cmt:'Có cách nào làm sổ tiết kiệm ảo để chứng minh tài chính không ad?',draft:'Dạ Hai Pals chỉ hỗ trợ hồ sơ thật và hợp lệ. Anh inbox để em tư vấn cách chứng minh tài chính đúng quy định nhé ạ.',tip:'Không hướng dẫn làm giấy tờ giả. Có thể ẩn bình luận nếu người này hỏi lặp lại.'},
+ {risk:'green',who:'Lan Phương',cmt:'Bài hữu ích quá, cảm ơn page!',draft:'Dạ cảm ơn chị đã theo dõi Hai Pals ạ! Chị cần hỗ trợ hồ sơ visa nào cứ inbox em nhé.',tip:'Thả tim bình luận là đủ nếu bận.'},
+ {risk:'yellow',who:'Đức Huy',cmt:'Đi Mỹ cần chứng minh tài chính bao nhiêu tiền vậy?',draft:'Dạ visa Mỹ không có con số cố định, Lãnh sự xem tổng thể công việc, tài chính và mục đích chuyến đi. Anh inbox để tư vấn viên xem hồ sơ cụ thể giúp anh ạ.',tip:'Khớp FAQ visa Mỹ.'},
+ {risk:'yellow',who:'Bích Ngọc',cmt:'Visa Hàn 5 năm cần giấy tờ gì vậy ạ?',draft:'Dạ visa Hàn 5 năm cần hộ chiếu, ảnh, giấy tờ công việc và chứng minh tài chính tùy diện. Em inbox danh sách đầy đủ cho chị nhé ạ.',tip:'Đối chiếu danh sách giấy tờ mới nhất của Lãnh sự Hàn.'}
 ];
-let poolIdx=0,qid=0,qTab='wait',qOpen=false;const QUEUE=[];
+const POSTS=[
+ {title:'5 lỗi khiến hồ sơ visa Nhật bị trượt',body:'Bạn đã chuẩn bị đủ giấy tờ nhưng vẫn trượt visa Nhật? Đây là 5 lỗi Hai Pals gặp nhiều nhất khi soát hồ sơ…',tags:'#visanhat #haipals',time:'20:00 hôm nay'},
+ {title:'Lịch hẹn visa Schengen mùa cao điểm: nộp sớm bao lâu?',body:'Mùa hè và Tết là lúc lịch hẹn Schengen kín nhất. Nộp trước ngày bay bao lâu là an toàn?…',tags:'#schengen #dulichchauau',time:'11:30 ngày mai'},
+ {title:'Phỏng vấn visa Mỹ: 7 câu hỏi hay gặp',body:'Lãnh sự hỏi gì trong 2–3 phút phỏng vấn? Hai Pals tổng hợp 7 câu hỏi và cách trả lời rõ ràng, trung thực…',tags:'#visamy #phongvanvisa',time:'20:00 ngày mai'},
+ {title:'Chứng minh tài chính visa Hàn: những điều cần biết',body:'Sổ tiết kiệm, sao kê, tài sản… loại nào được chấp nhận và cần chuẩn bị trước bao lâu?…',tags:'#visahan #chungminhtaichinh',time:'20:00 thứ Bảy'}
+];
+let poolIdx=0,postIdx=0,qid=0,qTab='cmt',qOpen=false;const QUEUE=[];
 function checkDraft(t){const low=(t||'').toLowerCase();return BANNED.filter(w=>low.includes(w))}
-function pending(){return QUEUE.filter(q=>!q.status)}
+function pending(kind){return QUEUE.filter(q=>!q.status&&(!kind||q.kind===kind))}
+function openqText(){return selected===5?`Mở bài chờ duyệt · ${pending('post').length} bài`:`Mở bình luận mới · ${pending('cmt').length} việc`}
 function addComment(ago=0){
-  const src=POOL[poolIdx++%POOL.length];const q=Object.assign({id:++qid,at:Date.now()-ago*60000},src);
-  if(q.risk==='green'&&!checkDraft(q.draft).length){q.status='auto';q.doneAt=q.at;stats.replies++}
-  QUEUE.unshift(q);if(QUEUE.length>40)QUEUE.pop();return q;
+  const q=Object.assign({kind:'cmt',id:++qid,at:Date.now()-ago*60000},POOL[poolIdx++%POOL.length]);
+  QUEUE.unshift(q);if(QUEUE.length>50)QUEUE.pop();stats.replies++;return q;
 }
-function zenitsuShift(){
-  const n=1+((Math.random()*2)|0);let sent=0;
-  for(let k=0;k<n;k++){const q=addComment();if(q.status==='auto')sent++}
-  const t=new Date(),hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
-  const li=document.createElement('li');li.innerHTML=`<time>${hm}</time><span><em style="--c:${AGENTS[6].color}">${esc(AGENTS[6].name)}</em> ${sent?`tự đăng ${sent} câu an toàn · `:''}gửi nháp vào <code>hàng chờ duyệt</code></span>`;
-  logEl.prepend(li);while(logEl.children.length>6)logEl.lastChild.remove();
-  renderQueue();
+function addPost(ago=0,n=stats.cycle){
+  const q=Object.assign({kind:'post',id:++qid,at:Date.now()-ago*60000,n},POSTS[postIdx++%POSTS.length]);
+  QUEUE.unshift(q);if(QUEUE.length>50)QUEUE.pop();return q;
 }
+function logLine(i,html){const t=new Date(),hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+  const li=document.createElement('li');li.innerHTML=`<time>${hm}</time><span><em style="--c:${AGENTS[i].color}">${esc(AGENTS[i].name)}</em> ${html}</span>`;
+  logEl.prepend(li);while(logEl.children.length>6)logEl.lastChild.remove()}
+function zenitsuShift(){const n=1+((Math.random()*2)|0);for(let k=0;k<n;k++)addComment();
+  logLine(6,`báo ${n} bình luận mới kèm gợi ý → <code>hộp việc của bạn</code>`);renderQueue()}
+function tanjiroShift(){stats.posts++;const q=addPost();logLine(5,`gửi bài “${esc(q.title)}” → <code>bài chờ duyệt</code>`);renderQueue()}
 function ago(ts){const m=Math.max(0,Math.round((Date.now()-ts)/60000));return m<1?'vừa xong':m<60?`${m} phút trước`:`${Math.round(m/60)} giờ trước`}
 function hl(text,hits){let h=esc(text);hits.forEach(w=>{h=h.replace(new RegExp(w.replace(/[.*+?^${}()|[\]\\%]/g,'\\$&'),'gi'),m=>`<mark>${m}</mark>`)});return h}
-function itemHTML(q){
-  const R=RISK[q.risk];const hits=q.draft?checkDraft(q.draft):[];
-  let body='',acts='';
-  if(q.risk==='red'){
-    body=`<div class="check bad">Zenitsu không soạn trả lời. ${esc(q.reason)}</div>`;
-    if(!q.status)acts=`<div class="acts"><button class="go" data-act="handle">Tôi sẽ xử lý</button><button data-act="hide" class="no">Ẩn bình luận</button></div>`;
-  }else{
-    const draft=q.editing?`<textarea id="edit-${q.id}" aria-label="Sửa câu trả lời">${esc(q.draft)}</textarea>`:`<p>${hl(q.draft,hits)}</p>`;
-    body=`<div class="draft"><span class="kicker">${q.edited?'Bạn đã sửa nháp':'Zenitsu soạn nháp'}</span>${draft}</div>`;
-    body+=hits.length?`<div class="check bad">Giyu chặn: có câu cấm ${hits.map(w=>`<mark>${esc(w)}</mark>`).join(' ')}. Sửa lại rồi mới duyệt được.</div>`
-      :q.risk==='green'?`<div class="check ok">Giyu: mẫu câu đã duyệt, không có câu cấm.</div>`
-      :`<div class="check warn">Giyu: không có câu cấm. ${esc(q.note||'Cần bạn xác nhận thông tin')}.</div>`;
-    if(!q.status)acts=q.editing?`<div class="acts"><button class="go" data-act="save">Lưu nháp</button><button data-act="cancel">Hủy</button></div>`
-      :`<div class="acts"><button class="go" data-act="approve" ${hits.length?'disabled':''}>Duyệt & đăng</button><button data-act="edit">Sửa</button><button class="no" data-act="reject">Từ chối</button></div>`;
-  }
-  const st={auto:['posted','Zenitsu tự đăng'],approved:['posted','Bạn đã duyệt & đăng'],rejected:['','Đã từ chối · không đăng'],handled:['','Bạn nhận xử lý'],hidden:['','Đã ẩn bình luận']}[q.status];
-  return `<article class="q-item" style="--r:${R.c}" data-id="${q.id}"><header><span class="risk">${R.t}</span><span class="who">${esc(q.who)} · ${ago(q.at)}</span></header>
-    <p class="cmt">“${esc(q.cmt)}”</p>${body}${acts}${st?`<div class="done-st ${st[0]}">${st[1]}</div>`:''}</article>`;
+const DONE={replied:['posted','Bạn đã trả lời'],skipped:['','Đã bỏ qua'],handled:['posted','Bạn đã xử lý riêng'],published:['posted','Bạn đã đăng'],returned:['','Đã trả lại Rengoku sửa']};
+function cmtHTML(q){
+  const R=RISK[q.risk];const hits=checkDraft(q.draft);
+  const draft=q.editing?`<textarea id="edit-${q.id}" aria-label="Sửa gợi ý trả lời">${esc(q.draft)}</textarea>`:`<p>${hl(q.draft,hits)}</p>`;
+  let h=`<div class="draft"><span class="kicker">${q.edited?'Bạn đã sửa gợi ý':'Zenitsu gợi ý trả lời'}</span>${draft}</div>`;
+  h+=hits.length?`<div class="check bad">Giyu cảnh báo: đừng dùng câu này, có từ cấm ${hits.map(w=>`<mark>${esc(w)}</mark>`).join(' ')}. Sửa lại trước khi sao chép.</div>`
+    :`<div class="check ${q.risk==='green'?'ok':q.risk==='red'?'bad':'warn'}">Lưu ý: ${esc(q.tip)}</div>`;
+  let acts='';
+  if(!q.status)acts=q.editing?`<div class="acts"><button class="go" data-act="save">Lưu gợi ý</button><button data-act="cancel">Hủy</button></div>`
+    :`<div class="acts"><button class="go" data-act="copy" ${hits.length?'disabled':''}>Sao chép gợi ý</button><button data-act="edit">Sửa</button><button data-act="${q.risk==='red'?'handled':'replied'}">${q.risk==='red'?'Đã xử lý':'Đã trả lời'}</button><button class="no" data-act="skipped">Bỏ qua</button></div>`;
+  return `<header><span class="risk">${R.t}</span><span class="who">${esc(q.who)} · ${ago(q.at)}</span></header><p class="cmt">“${esc(q.cmt)}”</p>${h}${acts}`;
 }
+function postHTML(q){
+  const acts=q.status?'':`<div class="acts"><button class="go" data-act="copy">Sao chép nội dung</button><button data-act="published">Đã đăng</button><button class="no" data-act="returned">Trả lại sửa</button></div>`;
+  return `<header><span class="risk">Bài chờ duyệt</span><span class="who">Tanjiro · ${ago(q.at)}</span></header>
+    <p class="post-title">${esc(q.title)}</p><div class="draft"><p>${esc(q.body)}</p><p>${esc(q.tags)}</p></div>
+    <div class="post-meta"><span>fb-post-MIN0${q.n}.md</span><span>visual-MIN0${q.n}.png · 9:16</span><span>Gợi ý đăng: ${esc(q.time)}</span></div>
+    <div class="check ok">Giyu đã soát: đúng chính tả, không có câu cấm.</div>${acts}`;
+}
+function itemHTML(q){const st=DONE[q.status];const c=q.kind==='post'?'#9b7bff':RISK[q.risk].c;
+  return `<article class="q-item" style="--r:${c}" data-id="${q.id}">${q.kind==='post'?postHTML(q):cmtHTML(q)}${st?`<div class="done-st ${st[0]}">${st[1]}</div>`:''}</article>`}
 function renderQueue(){
-  const p=pending(),done=QUEUE.filter(q=>q.status);
-  const n=$('#qn');n.textContent=p.length;$('#qbtn').classList.toggle('alert',p.some(q=>q.risk==='red'));
-  $('#tw').textContent=p.length;$('#td').textContent=done.length;
-  $('#tab-wait').setAttribute('aria-selected',String(qTab==='wait'));$('#tab-done').setAttribute('aria-selected',String(qTab==='done'));
-  const list=qTab==='wait'?p.sort((a,b)=>({red:0,yellow:1,green:2}[a.risk]-{red:0,yellow:1,green:2}[b.risk])||b.at-a.at):done.sort((a,b)=>(b.doneAt||0)-(a.doneAt||0));
-  const el=$('#qlist');const editing=document.activeElement&&document.activeElement.tagName==='TEXTAREA'&&el.contains(document.activeElement);
-  if(editing)return;
-  el.innerHTML=list.length?list.map(itemHTML).join(''):`<p class="q-empty">${qTab==='wait'?'Không còn việc chờ. Zenitsu sẽ gửi nháp mới sau mỗi lượt trực.':'Chưa có bình luận nào được xử lý.'}</p>`;
+  const pc=pending('cmt'),pp=pending('post'),done=QUEUE.filter(q=>q.status);
+  $('#qn').textContent=pc.length+pp.length;$('#qbtn').classList.toggle('alert',pc.some(q=>q.risk==='red'));
+  $('#tc').textContent=pc.length;$('#tp').textContent=pp.length;$('#td').textContent=done.length;
+  ['cmt','post','done'].forEach(t=>$('#tab-'+t).setAttribute('aria-selected',String(qTab===t)));
+  $('#policy').hidden=qTab!=='cmt';
+  const order={red:0,yellow:1,green:2};
+  const list=qTab==='cmt'?pc.sort((a,b)=>order[a.risk]-order[b.risk]||b.at-a.at):qTab==='post'?pp.sort((a,b)=>b.at-a.at):done.sort((a,b)=>(b.doneAt||0)-(a.doneAt||0));
+  const el=$('#qlist');if(document.activeElement&&document.activeElement.tagName==='TEXTAREA'&&el.contains(document.activeElement))return;
+  const empty={cmt:'Không có bình luận mới. Zenitsu sẽ báo khi có người bình luận.',post:'Chưa có bài chờ duyệt. Tanjiro sẽ gửi bài sau mỗi vòng làm việc.',done:'Chưa có việc nào xong.'}[qTab];
+  el.innerHTML=list.length?list.map(itemHTML).join(''):`<p class="q-empty">${empty}</p>`;
   refreshStatus();
-  if(selected===6){const b=$('#openq');if(b)b.textContent=`Mở hàng chờ duyệt · ${p.length} việc`}
+  const b=$('#openq');if(b)b.textContent=openqText();
 }
-function openQueue(v){qOpen=v;$('#queue').hidden=!v;$('.log').hidden=v;$('#qbtn').setAttribute('aria-expanded',String(v));if(v){qTab='wait';renderQueue()}}
+function openQueue(v,tab){qOpen=v;$('#queue').hidden=!v;$('.log').hidden=v;$('#qbtn').setAttribute('aria-expanded',String(v));if(v){qTab=tab||(pending('cmt').length||!pending('post').length?'cmt':'post');renderQueue()}}
 $('#qbtn').onclick=()=>openQueue(!qOpen);$('#qclose').onclick=()=>openQueue(false);
-$('#tab-wait').onclick=()=>{qTab='wait';renderQueue()};$('#tab-done').onclick=()=>{qTab='done';renderQueue()};
+['cmt','post','done'].forEach(t=>$('#tab-'+t).onclick=()=>{qTab=t;renderQueue()});
+let toastT=0;function toast(msg,bad){const t=$('#toast');t.textContent=msg;t.style.background=bad?'#ff9a9a':'';t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,2200)}
 $('#qlist').addEventListener('click',e=>{
   const b=e.target.closest('button[data-act]');if(!b)return;const id=+b.closest('.q-item').dataset.id;const q=QUEUE.find(x=>x.id===id);if(!q)return;
   const act=b.dataset.act;
+  if(act==='copy'){const text=q.kind==='post'?`${q.title}\n\n${q.body}\n\n${q.tags}`:q.draft;
+    try{navigator.clipboard.writeText(text).then(()=>toast('Đã sao chép, dán vào Facebook để '+(q.kind==='post'?'đăng':'trả lời')),()=>toast('Không sao chép được, hãy bôi đen chữ và sao chép tay',true))}catch(err){toast('Không sao chép được, hãy bôi đen chữ và sao chép tay',true)}
+    return}
   if(act==='edit')q.editing=true;
   if(act==='cancel')q.editing=false;
   if(act==='save'){const t=$('#edit-'+id);if(t&&t.value.trim()){q.draft=t.value.trim();q.edited=true}q.editing=false}
-  if(act==='approve'&&!checkDraft(q.draft).length){q.status='approved';stats.replies++}
-  if(act==='reject')q.status='rejected';
-  if(act==='handle')q.status='handled';
-  if(act==='hide')q.status='hidden';
-  if(q.status)q.doneAt=Date.now();
+  if(DONE[act]){q.status=act;q.doneAt=Date.now()}
   document.activeElement&&document.activeElement.blur();renderQueue();
   if(act==='edit'){const t=$('#edit-'+id);if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length)}}
 });
-[[2],[5],[9],[14],[21],[30]].forEach(([m])=>addComment(m));
+[2,5,9,14,21,30].forEach(m=>addComment(m));stats.replies-=6;
+addPost(40,stats.cycle-1);addPost(12,stats.cycle);
 setInterval(()=>{if(qOpen)renderQueue()},60000);
 
 /* camera moves */
@@ -741,7 +761,7 @@ function updatePipeline(dt){
   if(phase==='work'&&phaseT>=WORK){
     phase='travel';phaseT=0;chars[from].state='sent';
     if(from===6)zenitsuShift();
-    if(from===5)stats.posts++;
+    if(from===5)tanjiroShift();
     const file=AGENTS[from].file(stats.cycle);
     if(from===0){log(0,null,file);stats.cycle++}else log(from,to,file);
     const a=chars[from].base.clone().add(new THREE.Vector3(0,chars[from].obj.userData.top+.2,0)),b=chars[to].base.clone().add(new THREE.Vector3(0,chars[to].obj.userData.top+.2,0));
