@@ -126,7 +126,7 @@ body{background:var(--night);color:var(--ink);font-family:var(--f-body);-webkit-
 <div id="labels" aria-hidden="true"></div>
 
 <header class="top">
-  <div class="brand"><strong>Phố Đèn Lồng</strong><span>Đội quân AI · Hai Pals</span></div>
+  <div class="brand"><strong>Phố Đèn Lồng</strong><span>Đội Diệt Quỷ AI · Hai Pals</span></div>
   <nav class="chips" id="chips" aria-label="Chọn agent"></nav>
   <button class="btn" id="overview" type="button">Toàn cảnh</button>
 </header>
@@ -157,41 +157,41 @@ try{
 
 /* ---------- Agents ---------- */
 const AGENTS=[
- {key:'luffy',name:'Luffy Mũ Rơm',role:'Tổng chỉ huy',power:'Gear 5',place:'Đại Bản Doanh',color:'#f2c14e',
+ {key:'tengen',name:'Uzui Tengen',role:'Tổng chỉ huy',power:'Âm Hô Hấp',place:'Đại Bản Doanh',color:'#f2c14e',
   task:'ĐIỀU PHỐI ĐỘI QUÂN',taskSub:'Giao việc & tổng hợp báo cáo',
   desc:'Nhận mục tiêu tuần → chia việc cho 6 agent, theo dõi tiến độ và gửi báo cáo cuối ngày cho chủ doanh nghiệp.',
   file:n=>`daily-report-MIN0${n}.md`,work:'Tổng hợp báo cáo',
-  look:{skin:0xffd2ad,hair:0x15121a,style:'messy',top:0xd6283a,pants:0x2f5fb3,belt:0xe8c25a,hat:true,scarCheek:true}},
- {key:'shanks',name:'Shanks Tóc Đỏ',role:'Nghiên cứu',power:'Haki Quan Sát',place:'Tàng Thư Các',color:'#5aa9ff',
+  look:{skin:0xf3d0b0,hair:0xe9e9f2,style:'short',top:0xf3d0b0,pants:0x23232e,belt:0x6a3cc8,gems:true,paint:0xd8335a,sword:2,swordCols:[0xc9a24a,0xc9a24a],scale:1.12}},
+ {key:'shinobu',name:'Kocho Shinobu',role:'Nghiên cứu',power:'Trùng Hô Hấp',place:'Tàng Thư Các',color:'#5aa9ff',
   task:'TÌM CHỦ ĐỀ HOT',taskSub:'Săn tiêu đề & chủ đề viral',
   desc:'Quét xu hướng visa Mỹ, Schengen, Nhật, Hàn và câu khách hay hỏi → chọn chủ đề hot cho Fanpage.',
   file:()=>'visa-trends-w43.md',work:'Quét xu hướng visa',
-  look:{skin:0xf3c9a6,hair:0xb3121c,style:'long',top:0xf1ece2,pants:0x6b4a32,cloak:0x16131c,scarEye:true,sword:1}},
- {key:'naruto',name:'Naruto Uzumaki',role:'Viết bài',power:'Kurama Mode',place:'Nhất Lạc Quán',color:'#ff9f1c',
+  look:{skin:0xfbe0cc,hair:0x17121e,tip:0x7b4bd1,style:'bob',top:0x1b1b26,pants:0x1b1b26,cloak:0xffffff,pattern:['wing','#f4f1f8','#3fb7a8'],butterfly:true,eyes:[0x8e6bd8,0x8e6bd8],sword:1,swordCols:[0x9ad8e8]}},
+ {key:'rengoku',name:'Rengoku Kyojuro',role:'Viết bài',power:'Viêm Hô Hấp',place:'Nhất Lạc Quán',color:'#ff9f1c',
   task:'VIẾT BÀI CONTENT',taskSub:'Viết bài & kịch bản Reels',
   desc:'Nhận chủ đề hot → viết bài Fanpage và kịch bản Reels đúng giọng văn Hai Pals.',
   file:n=>`fb-post-MIN0${n}.md`,work:'Viết bài Fanpage',
-  look:{skin:0xffd6b0,hair:0xffcf2e,style:'spiky',top:0xff8a1c,pants:0xff8a1c,cloak:0xffc93c,cloakGlow:true,band:0x1f2a55,whiskers:true}},
- {key:'kaido',name:'Tứ Hoàng Kaido',role:'Thiết kế',power:'Lôi Minh Bát Quái',place:'Bí Thuật Xưởng',color:'#ff4fa3',
+  look:{skin:0xffd6b0,hair:0xffc52e,tip:0xe0301e,style:'spiky',top:0x1b1b26,pants:0x1b1b26,belt:0xf2f2f2,cloak:0xffffff,pattern:['flame','#f6f1e6','#ff5a1f'],eyes:[0xffb21e,0xffb21e],spark:0xff6a1a}},
+ {key:'inosuke',name:'Hashibira Inosuke',role:'Thiết kế',power:'Thú Hô Hấp',place:'Bí Thuật Xưởng',color:'#ff4fa3',
   task:'TẠO ẢNH 9:16',taskSub:'Tạo ảnh & thiết kế visual',
   desc:'Đọc nội dung bài → thiết kế ảnh minh họa và bố cục chữ 9:16 bắt mắt.',
   file:n=>`visual-MIN0${n}.png`,work:'Dựng ảnh 9:16',
-  look:{skin:0xd9a07a,hair:0x1a1420,style:'long',top:0xd9a07a,pants:0x3c4a2a,cloak:0x5b2a86,horns:true,club:true,scale:1.28,beard:true}},
- {key:'zoro',name:'Roronoa Zoro',role:'Kiểm duyệt',power:'Tam Kiếm Phái',place:'Kiếm Đạo Đường',color:'#3ddc97',
+  look:{skin:0xf2c9a8,hair:0x4a4f5c,style:'mane',top:0xf2c9a8,pants:0x6a7488,belt:0x7a5634,fur:true,boar:true,sword:2,swordCols:[0x8a93a3,0x8a93a3]}},
+ {key:'giyu',name:'Tomioka Giyu',role:'Kiểm duyệt',power:'Thủy Hô Hấp',place:'Kiếm Đạo Đường',color:'#3ddc97',
   task:'KIỂM DUYỆT',taskSub:'Soát lỗi & thông tin visa',
   desc:'Đọc bài và ảnh → kiểm tra chính tả, phí và giấy tờ visa cho đúng, chặn mọi câu hứa “bao đậu” → duyệt hoặc trả lại.',
   file:n=>`review-MIN0${n}.md`,work:'Soát bài & ảnh',
-  look:{skin:0xf0c49e,hair:0x3fbf5a,style:'short',top:0x2f6d3a,pants:0x232a22,belt:0x9e1b1b,sword:3}},
- {key:'sasuke',name:'Sasuke Uchiha',role:'Hẹn giờ đăng',power:'Rinnegan',place:'Lôi Độn Đài',color:'#9b7bff',
+  look:{skin:0xf3d3b8,hair:0x14141e,style:'long',top:0x1b1b26,pants:0x1b1b26,belt:0xf2f2f2,cloak:0xffffff,pattern:['split','#8e1b2b','#3f8a5a'],eyes:[0x2a5fb3,0x2a5fb3],sword:1,swordCols:[0x3a7fd8]}},
+ {key:'tanjiro',name:'Kamado Tanjiro',role:'Hẹn giờ đăng',power:'Nhật Hô Hấp',place:'Nhật Luân Đài',color:'#9b7bff',
   task:'ĐĂNG & LÊN LỊCH',taskSub:'Đăng bài & hẹn giờ tự động',
   desc:'Nhận bài đã duyệt → tự động xếp lịch đăng lên Fanpage Facebook đúng khung giờ vàng 20:00.',
   file:n=>`schedule-MIN0${n}.json`,work:'Xếp lịch đăng 20:00',
-  look:{skin:0xf6d6bc,hair:0x161a2e,style:'back',top:0xb9bccb,pants:0x2a2d44,belt:0x7a4bd1,eyes:[0xd81b2a,0x8e6bd8],chidori:true}},
- {key:'itachi',name:'Itachi Uchiha',role:'Trả lời cmt',power:'Sharingan',place:'Ảo Thuật Tháp',color:'#ff4b4b',
+  look:{skin:0xf6d6bc,hair:0x4a1416,tip:0x8a2a1e,style:'messy',top:0x1b1b26,pants:0x1b1b26,belt:0xf2f2f2,cloak:0xffffff,pattern:['check','#1b1b1b','#1f8a5a'],eyes:[0x9e2a2a,0x9e2a2a],scarForehead:true,earrings:true,sword:1,swordCols:[0x111116],spark:0x4ab8ff}},
+ {key:'zenitsu',name:'Agatsuma Zenitsu',role:'Trả lời cmt',power:'Lôi Hô Hấp',place:'Lôi Minh Tháp',color:'#ff4b4b',
   task:'TRẢ LỜI CMT',taskSub:'Phản hồi & trả lời bình luận',
   desc:'Trực Fanpage 24/7 → trả lời bình luận, inbox hỏi phí visa và đo lường số liệu.',
   file:()=>'audience-questions.json',work:'Trả lời bình luận',
-  look:{skin:0xf3d3b8,hair:0x121219,style:'long',top:0x1a1a22,pants:0x1a1a22,cloak:0x101016,clouds:true,band:0x2a3550,eyes:[0xd81b2a,0xd81b2a]}}
+  look:{skin:0xfbdcc0,hair:0xffd23a,tip:0xff8a1c,style:'messy',top:0x1b1b26,pants:0x1b1b26,belt:0xf2f2f2,cloak:0xffffff,pattern:['tri','#ffb52e','#fff6dc'],eyes:[0x8a5a1a,0x8a5a1a],sword:1,swordCols:[0xffe27a],spark:0xffe23a}}
 ];
 
 /* ---------- Renderer / scene ---------- */
@@ -329,64 +329,68 @@ function makeHouse({w=8,d=7,accent='#f2c14e',sign=null,noren=null,lanternColor=0
 }
 
 /* ---------- characters ---------- */
+function patternTex(kind,a,b){return canvasTex(256,128,(g,w,h)=>{g.fillStyle=a;g.fillRect(0,0,w,h);g.fillStyle=b;
+  if(kind==='check'){const q=16;for(let y=0;y<h;y+=q)for(let x=0;x<w;x+=q)if(((x+y)/q)%2===0)g.fillRect(x,y,q,q)}
+  if(kind==='tri'){const q=32;for(let y=0;y<h;y+=q)for(let x=0;x<w;x+=q){g.beginPath();g.moveTo(x+2,y+q-2);g.lineTo(x+q/2,y+6);g.lineTo(x+q-2,y+q-2);g.fill()}}
+  if(kind==='flame'){for(let x=-10;x<w;x+=22){g.beginPath();g.moveTo(x,h);g.quadraticCurveTo(x+2,h*.55,x+11,h*.3);g.quadraticCurveTo(x+18,h*.62,x+22,h);g.fill()}}
+  if(kind==='split'){g.fillRect(w/2,0,w/2,h);g.fillStyle='rgba(240,200,70,.75)';for(let i=0;i<70;i++){const x=w/2+Math.random()*w/2,y=Math.random()*h;g.beginPath();g.moveTo(x,y);g.lineTo(x+7,y+4);g.lineTo(x,y+8);g.fill()}}
+  if(kind==='wing'){const gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,a);gr.addColorStop(.55,a);gr.addColorStop(1,b);g.fillStyle=gr;g.fillRect(0,0,w,h);g.strokeStyle='rgba(20,20,30,.5)';g.lineWidth=2;for(let x=0;x<w;x+=32){g.beginPath();g.moveTo(x,h*.4);g.lineTo(x+16,h);g.stroke()}}
+})}
 function spike(parent,mat,origin,dir,len,rad){const m=new THREE.Mesh(new THREE.ConeGeometry(rad,len,6),mat);const d=dir.clone().normalize();m.position.copy(origin).addScaledVector(d,.48+len*.38);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d);parent.add(m);return m}
 function chibi(L){
   const g=new THREE.Group(),body=new THREE.Group();g.add(body);
-  const skin=M(L.skin,{roughness:.6}),hair=M(L.hair,{roughness:.55}),top=M(L.top),pants=M(L.pants);
-  const legG=new THREE.CylinderGeometry(.13,.15,.5,10);
-  [-.17,.17].forEach(x=>{box(.26,.12,.36,M(0x26222e),x,.06,.05,body);const l=new THREE.Mesh(legG,pants);l.position.set(x,.32,0);body.add(l)});
+  const skin=M(L.skin,{roughness:.6}),hair=M(L.hair,{roughness:.55}),tipM=L.tip?M(L.tip,{roughness:.55}):hair,top=M(L.top),pants=M(L.pants);
+  const legG=new THREE.CylinderGeometry(.13,.17,.5,10);
+  [-.17,.17].forEach(x=>{box(.26,.12,.36,M(0xf2f2f2),x,.06,.05,body);const l=new THREE.Mesh(legG,pants);l.position.set(x,.32,0);body.add(l)});
   const torso=new THREE.Mesh(new THREE.CylinderGeometry(.36,.46,.8,16),top);torso.position.y=.95;body.add(torso);
   if(L.belt){const b=new THREE.Mesh(new THREE.TorusGeometry(.44,.06,6,20),M(L.belt));b.rotation.x=Math.PI/2;b.position.y=.62;body.add(b)}
+  if(L.fur){const f=new THREE.Mesh(new THREE.CylinderGeometry(.48,.6,.32,14,1,true),M(0x6b4a2e,{side:THREE.DoubleSide,roughness:1}));f.position.y=.5;body.add(f)}
   const armG=new THREE.CylinderGeometry(.1,.11,.6,8);
   const hands=[];
-  [-1,1].forEach(s=>{const a=new THREE.Mesh(armG,L.cloak?M(L.cloak):top);a.position.set(s*.5,1.02,0);a.rotation.z=s*.38;body.add(a);
+  const armMat=L.cloak?M(L.pattern?L.pattern[1]:L.cloak):top;
+  [-1,1].forEach(s=>{const a=new THREE.Mesh(armG,L.top===L.skin?skin:armMat);a.position.set(s*.5,1.02,0);a.rotation.z=s*.38;body.add(a);
     const h=new THREE.Mesh(new THREE.SphereGeometry(.12,10,8),skin);h.position.set(s*.62,.74,.02);body.add(h);hands.push(h)});
   if(L.cloak){
-    const cm=M(L.cloak,{side:THREE.DoubleSide,emissive:L.cloakGlow?new THREE.Color(0xff8a00):new THREE.Color(0),emissiveIntensity:L.cloakGlow?.35:0});
-    const c=new THREE.Mesh(new THREE.CylinderGeometry(.47,.72,1.2,20,1,true,.42,Math.PI*2-.84),cm);c.position.y=.8;body.add(c);
-    const col=new THREE.Mesh(new THREE.TorusGeometry(.4,.09,6,18),cm);col.rotation.x=Math.PI/2;col.position.y=1.38;body.add(col);
-    if(L.clouds){const red=M(0xc8102e,{emissive:0x400000}),wh=M(0xffffff);for(let i=0;i<7;i++){const th=Math.PI+(i-3)*.42,y=.45+(i%3)*.3,r=.5+(1.4-y)*.12;
-      const cl=new THREE.Mesh(new THREE.SphereGeometry(.11,8,6),red);cl.scale.set(1.5,.8,.4);cl.position.set(Math.sin(th)*(r+.12),y,Math.cos(th)*(r+.12));cl.lookAt(0,y,0);body.add(cl)}}
+    const opt={side:THREE.DoubleSide};if(L.pattern)opt.map=patternTex(...L.pattern);
+    const cm=M(L.cloak,opt);
+    const c=new THREE.Mesh(new THREE.CylinderGeometry(.47,.72,1.2,24,1,true,.42,Math.PI*2-.84),cm);c.position.y=.8;body.add(c);
   }
   // head
   const headY=1.78;const head=new THREE.Group();head.position.y=headY;body.add(head);
-  head.add(new THREE.Mesh(new THREE.SphereGeometry(.6,24,18),skin));
+  head.add(new THREE.Mesh(new THREE.SphereGeometry(.6,24,18),L.boar?M(0x868c98,{roughness:.9}):skin));
   const eyeCols=L.eyes||[0x1b1424,0x1b1424];
-  [-1,1].forEach((s,i)=>{const wht=new THREE.Mesh(new THREE.SphereGeometry(.1,10,8),B(0xffffff));wht.scale.set(1,1.25,.4);wht.position.set(s*.21,-.02,.56);head.add(wht);
-    const e=new THREE.Mesh(new THREE.SphereGeometry(.07,10,8),B(eyeCols[i]));e.scale.set(1,1.3,.4);e.position.set(s*.21,-.03,.59);head.add(e)});
-  box(.16,.03,.02,M(0x5a2a2a),0,-.25,.585,head);
-  if(L.scarEye){for(let i=0;i<3;i++){const sc=box(.035,.4,.02,B(0x8a1018),.28+(i-1)*.07,.0,.6,head);sc.rotation.z=.25}}
-  if(L.scarCheek){box(.14,.025,.02,B(0x8a2a2a),.22,-.17,.565,head)}
-  if(L.whiskers){[-1,1].forEach(s=>{for(let i=0;i<3;i++){box(.15,.02,.02,B(0x5a3a2a),s*.36,-.12-i*.06,.5,head).rotation.y=s*.5}})}
-  if(L.beard){const bd=new THREE.Mesh(new THREE.ConeGeometry(.3,.5,8),hair);bd.position.set(0,-.55,.3);bd.rotation.x=Math.PI;head.add(bd)}
+  [-1,1].forEach((s,i)=>{if(!L.boar){const wht=new THREE.Mesh(new THREE.SphereGeometry(.1,10,8),B(0xffffff));wht.scale.set(1,1.25,.4);wht.position.set(s*.21,-.02,.56);head.add(wht)}
+    const e=new THREE.Mesh(new THREE.SphereGeometry(L.boar?.08:.07,10,8),B(L.boar?0x2a3a6a:eyeCols[i]));e.scale.set(1,1.3,.4);e.position.set(s*.21,L.boar?.08:-.03,.59);head.add(e)});
+  if(!L.boar)box(.16,.03,.02,M(0x5a2a2a),0,-.25,.585,head);
+  if(L.boar){const snout=new THREE.Mesh(new THREE.CylinderGeometry(.2,.26,.34,14),M(0xa7adb8));snout.rotation.x=Math.PI/2;snout.position.set(0,-.2,.62);head.add(snout);
+    [-1,1].forEach(s=>{const n=new THREE.Mesh(new THREE.SphereGeometry(.05,8,6),B(0x111111));n.position.set(s*.08,-.2,.8);head.add(n);
+      const ear=new THREE.Mesh(new THREE.ConeGeometry(.16,.4,6),M(0x868c98));ear.position.set(s*.42,.5,0);ear.rotation.z=-s*.6;head.add(ear);
+      const tusk=new THREE.Mesh(new THREE.ConeGeometry(.04,.22,6),M(0xf2ead8));tusk.position.set(s*.2,-.32,.72);tusk.rotation.z=s*.4;head.add(tusk)})}
+  if(L.paint){const pm=B(L.paint);[0,1].forEach(k=>{const p=box(.05,.2,.02,pm,-.33+k*.07,.12,.52,head);p.rotation.z=-.5})}
+  if(L.scarForehead){const sc=box(.2,.09,.02,B(0x8a2a22),-.2,.3,.56,head);sc.rotation.z=.4}
+  if(L.earrings){[-1,1].forEach(s=>{const e=box(.08,.2,.02,B(0xfff4e0),s*.6,-.24,.05,head);const sun=new THREE.Mesh(new THREE.CircleGeometry(.03,10),B(0xc8102e));sun.position.set(0,0,.012);e.add(sun);e.rotation.y=s*Math.PI/2})}
   // hair cap
-  const cap=new THREE.Mesh(new THREE.SphereGeometry(.64,22,14,0,Math.PI*2,0,Math.PI*.52),hair);cap.rotation.x=-.42;cap.position.set(0,.04,-.04);head.add(cap);
+  const cap=new THREE.Mesh(new THREE.SphereGeometry(.64,22,14,0,Math.PI*2,0,Math.PI*.52),hair);cap.rotation.x=-.42;cap.position.set(0,.04,-.04);if(!L.boar)head.add(cap);
   const O=new THREE.Vector3(0,.02,0);
-  if(L.style==='spiky'){for(let i=0;i<14;i++){const th=i/14*Math.PI*2,ph=.35+(i%2)*.35;spike(head,hair,O,new THREE.Vector3(Math.sin(th)*Math.sin(ph),Math.cos(ph),Math.cos(th)*Math.sin(ph)-.25),.55,.17)}
-    for(let i=0;i<5;i++)spike(head,hair,O,new THREE.Vector3((i-2)*.35,.5,.9),.32,.12)}
-  if(L.style==='back'){for(let i=0;i<9;i++){const th=Math.PI+(i-4)*.32;spike(head,hair,O,new THREE.Vector3(Math.sin(th),.45+(i%2)*.25,Math.cos(th)),.62,.17)}
-    [-1,1].forEach(s=>{const bang=new THREE.Mesh(new THREE.BoxGeometry(.14,.55,.1),hair);bang.position.set(s*.5,-.12,.32);bang.rotation.z=s*.12;head.add(bang)})}
-  if(L.style==='messy'){for(let i=0;i<8;i++){const th=i/8*Math.PI*2;spike(head,hair,O,new THREE.Vector3(Math.sin(th),.6,Math.cos(th)-.2),.28,.14)}}
+  if(L.style==='spiky'){for(let i=0;i<14;i++){const th=i/14*Math.PI*2,ph=.35+(i%2)*.35;spike(head,i%3?hair:tipM,O,new THREE.Vector3(Math.sin(th)*Math.sin(ph),Math.cos(ph),Math.cos(th)*Math.sin(ph)-.25),.55,.17)}
+    for(let i=0;i<5;i++)spike(head,tipM,O,new THREE.Vector3((i-2)*.35,.5,.9),.32,.12)}
+  if(L.style==='messy'){for(let i=0;i<10;i++){const th=i/10*Math.PI*2;spike(head,i%2?hair:tipM,O,new THREE.Vector3(Math.sin(th),.6,Math.cos(th)-.2),.3,.14)}}
   if(L.style==='short'){for(let i=0;i<10;i++){const th=i/10*Math.PI*2;spike(head,hair,O,new THREE.Vector3(Math.sin(th)*.6,1,Math.cos(th)*.6-.1),.18,.13)}}
-  if(L.style==='long'){const back=new THREE.Mesh(new THREE.CylinderGeometry(.52,.6,1.15,16,1,true,Math.PI*.55,Math.PI*.9),hair);back.material=M(L.hair,{side:THREE.DoubleSide});back.position.set(0,-.38,-.06);head.add(back);
+  if(L.style==='mane'){for(let i=0;i<9;i++){const th=Math.PI+(i-4)*.35;spike(head,hair,O,new THREE.Vector3(Math.sin(th),.7,Math.cos(th)),.55,.16)}}
+  if(L.style==='bob'){[-1,1].forEach(s=>{const sd=new THREE.Mesh(new THREE.BoxGeometry(.16,.55,.4),hair);sd.position.set(s*.56,-.18,.12);head.add(sd);const tp=box(.17,.12,.41,tipM,s*.56,-.48,.12,head)});
+    const bun=new THREE.Mesh(new THREE.SphereGeometry(.28,12,10),hair);bun.position.set(0,.3,-.52);head.add(bun)}
+  if(L.style==='long'){const back=new THREE.Mesh(new THREE.CylinderGeometry(.52,.6,1.15,16,1,true,Math.PI*.55,Math.PI*.9),M(L.hair,{side:THREE.DoubleSide}));back.position.set(0,-.38,-.06);head.add(back);
     [-1,1].forEach(s=>{const f=new THREE.Mesh(new THREE.BoxGeometry(.13,.6,.12),hair);f.position.set(s*.52,-.2,.22);head.add(f)})}
-  if(L.band){const bm=M(L.band);const t=new THREE.Mesh(new THREE.TorusGeometry(.61,.06,6,24),bm);t.rotation.x=Math.PI/2-.25;t.position.y=.2;head.add(t);
-    const plate=box(.42,.16,.05,M(0xc9ccd6,{metalness:.8,roughness:.3}),0,.27,.58,head);plate.rotation.x=-.25}
-  if(L.hat){const straw=M(0xe8c25a,{roughness:.9});const brim=new THREE.Mesh(new THREE.CylinderGeometry(1.0,1.0,.05,28),straw);brim.position.y=.42;head.add(brim);
-    const crown=new THREE.Mesh(new THREE.CylinderGeometry(.42,.5,.38,22),straw);crown.position.y=.62;head.add(crown);
-    const rb=new THREE.Mesh(new THREE.CylinderGeometry(.505,.505,.12,22,1,true),M(0xc8102e));rb.position.y=.5;head.add(rb);head.rotation.z=.04}
-  if(L.horns){const hm=M(0xf2ead8,{roughness:.4});[-1,1].forEach(s=>{const h=new THREE.Mesh(new THREE.ConeGeometry(.13,.95,10),hm);h.position.set(s*.62,.52,0);h.rotation.z=-s*.95;head.add(h);
-    const h2=new THREE.Mesh(new THREE.ConeGeometry(.07,.45,8),hm);h2.position.set(s*1.0,.92,0);h2.rotation.z=-s*.2;head.add(h2)})}
-  // weapons
-  if(L.sword){for(let i=0;i<L.sword;i++){const sw=new THREE.Group();const blade=box(.06,1.15,.08,M(i===0?0xf5f5f5:i===1?0x1a1a1a:0x9e1b1b,{metalness:.6,roughness:.3}),0,0,0,sw);
+  if(L.butterfly){const bm=B(0xd86bd8,{side:THREE.DoubleSide});[-1,1].forEach(s=>{const w=new THREE.Mesh(new THREE.CircleGeometry(.16,3),bm);w.position.set(.42+s*.12,.42,-.25);w.rotation.set(0,-.6,s*Math.PI/2);head.add(w)})}
+  if(L.gems){const gb=new THREE.Mesh(new THREE.TorusGeometry(.62,.06,6,24),GOLD);gb.rotation.x=Math.PI/2-.25;gb.position.y=.22;head.add(gb);
+    [0xe02a4a,0x3a8aff,0x3ddc97,0xe02a4a].forEach((c,k)=>{const gm=new THREE.Mesh(new THREE.OctahedronGeometry(.07),B(c));const th=(k-1.5)*.4;gm.position.set(Math.sin(th)*.63,.3,Math.cos(th)*.6);head.add(gm)})}
+  // nichirin swords
+  if(L.sword){for(let i=0;i<L.sword;i++){const sw=new THREE.Group();box(.06,1.15,.08,M(L.swordCols[i],{metalness:.6,roughness:.3}),0,0,0,sw);
     box(.16,.04,.16,GOLD,0,.5,0,sw);sw.position.set(.42,.62,-.12-i*.1);sw.rotation.z=-.9+i*.12;sw.rotation.y=.2;body.add(sw)}}
-  if(L.club){const club=new THREE.Group();const c=new THREE.Mesh(new THREE.CylinderGeometry(.12,.06,1.6,10),M(0x2b2b33,{metalness:.5}));club.add(c);
-    for(let i=0;i<10;i++){const st=new THREE.Mesh(new THREE.ConeGeometry(.04,.12,5),GOLD);const a=i*1.9;st.position.set(Math.cos(a)*.11,.1+i*.06,Math.sin(a)*.11);st.rotation.z=-Math.cos(a)*1.5;st.rotation.x=Math.sin(a)*1.5;club.add(st)}
-    club.position.set(.72,1.05,.15);club.rotation.z=-.25;body.add(club)}
-  if(L.chidori){const ch=new THREE.Mesh(new THREE.IcosahedronGeometry(.22,0),B(0x9fdcff,{transparent:true,opacity:.95}));ch.position.copy(hands[1].position).add(new THREE.Vector3(.1,.05,.12));body.add(ch);
-    const gl=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0x6ab8ff,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));gl.scale.set(1.3,1.3,1);ch.add(gl);g.userData.spark=ch}
+  if(L.spark){const ch=new THREE.Mesh(new THREE.IcosahedronGeometry(.2,0),B(L.spark,{transparent:true,opacity:.95}));ch.position.copy(hands[1].position).add(new THREE.Vector3(.1,.05,.12));body.add(ch);
+    const gl=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:L.spark,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));gl.scale.set(1.3,1.3,1);ch.add(gl);g.userData.spark=ch}
   const s=L.scale||1;g.scale.setScalar(s);
-  g.userData.body=body;g.userData.head=head;g.userData.headY=headY*s;g.userData.top=(L.hat?2.9:L.horns?3.1:2.65)*s;
+  g.userData.body=body;g.userData.head=head;g.userData.headY=headY*s;g.userData.top=(L.boar?2.85:2.65)*s;
   return g;
 }
 
